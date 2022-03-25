@@ -12,3 +12,5 @@ function convertcompactdomain(x::Vector{T}, a::T, b::T, c::T, d::T)::Vector{T} w
 
     return collect( convertcompactdomain(x[i], a, b, c, d) for i = 1:length(x) )
 end
+
+unzip(a) = map(x->getfield.(a, x), fieldnames(eltype(a)))
