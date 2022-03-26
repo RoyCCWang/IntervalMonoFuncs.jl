@@ -21,21 +21,17 @@ Random.seed!(25)
 
 a = [1.0; 20.0]
 b = [1.0; 1.0]
-fs = collect( xx->((xx-b[i])/sqrt(a[i]+(xx-b[i])^2)) for i = 1:length(a) )
+fs = collect( xx->(1/sqrt(a[i]+(xx-b[i])^2)^3) for i = 1:length(a) )
+int_fs = collect( xx->((xx-b[i])/sqrt(a[i]+(xx-b[i])^2)^3) for i = 1:length(a) )
 
-function evalinvf(y::T, a::T, b::T)::T where T <: Real
-    A = b*y^2-a
-    B = y^2-1
-    C = sqrt(y^2*(a^2-2*a*b-a*y^2+a+b^2))
-    D = y^2-1
+function evalinvf(y::T, a::T, b::T)::Tuple{T,T} where T <: Real
 
-    term1 = A/B
-    term2 = C/D
+    term = 1/(sqrt(y)^3) - a
 
-    return term1+term2, term1+term2
+    return b - term, b + term
 end
 
-invfs = collect( yy->evalinvf(yy, a[i], b[i]) for i = 1:length(a) )
+inv_fs = collect( yy->evalinvf(yy, a[i], b[i]) for i = 1:length(a) )
 
 
 
@@ -53,20 +49,36 @@ PyPlot.xlabel("x")
 PyPlot.ylabel("f")
 PyPlot.title("target warp func")
 
-
+unzip(a) = map(x->getfield.(a, x), fieldnames(eltype(a)))
 y = LinRange(-1+1e-5, 1-1e-5, 500)
 
 PyPlot.figure(fig_num)
 fig_num += 1
 
-for i = 1:length(fs)
-    PyPlot.plot(y, invfs[i].(y), label = "f[$(i)]")
+for i = 1:length(inv_fs)
+    x1, x2 = unzip(inv_fs[i].(y))
+
+    PyPlot.plot(y, x1, label = "x1, inv f[$(i)]")
 end
 
 PyPlot.legend()
-PyPlot.xlabel("x")
-PyPlot.ylabel("f")
-PyPlot.title("target warp func")
+PyPlot.xlabel("y")
+PyPlot.ylabel("inv f")
+PyPlot.title("inverse")
+
+
+PyPlot.figure(fig_num)
+fig_num += 1
+
+for i = 1:length(int_fs)
+
+    PyPlot.plot(x, int_fs[i].(x), label = "int f[$(i)]")
+end
+
+PyPlot.legend()
+PyPlot.xlabel("y")
+PyPlot.ylabel("int f")
+PyPlot.title("integral")
 
 @assert 1==2
 import NLopt
