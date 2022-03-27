@@ -10,6 +10,34 @@ mutable struct Piecewise2DLineType{T}
     len_z::Vector{T}
 end
 
+
+
+"""
+    getpiecewiselines(z_st::Vector{T}, z_fin::Vector{T}, c::T;
+        lb::T = -one(T), ub::T = one(T))
+
+Computes the parameters of a piece-wise linear function that contain the intervals in z_st and z_fin in the range, over the range in c.
+
+f = xx->MonotoneMaps.evalpiecewise2Dlinearfunc(xx, xs, ys, ms, bs)*scale
+maps [lb, ub] to [lb, ub]*scale.
+
+# Examples
+```jldoctest
+julia> c = 1.8
+1.8
+
+julia> z_st = [ -0.12; ]
+1-element Vector{Float64}:
+ -0.12
+
+julia> z_fin = [ 0.76; ]
+1-element Vector{Float64}:
+ 0.76
+
+julia> xs, ys, ms, bs, len_s, len_z = MonotoneMaps.getpiecewiselines(z_st, z_fin, c)
+([-1.0, -0.842857142857143, 0.9571428571428571, 1.0], [-1.0, -0.12, 0.76, 1.0], [5.600000000000001, 0.4888888888888889, 5.600000000000001], [4.600000000000001, 0.29206349206349214, -4.600000000000001], [1.8], [0.88])
+```
+"""
 function getpiecewiselines(z_st::Vector{T}, z_fin::Vector{T}, c::T;
     lb::T = -one(T), ub::T = one(T)) where T
 
@@ -292,4 +320,70 @@ function setupsimilarmonotonemap(shift_centers_set::Vector{Vector{T}},
     end
 
     return warp_param_set
+end
+
+
+################# application as a proximity-encouraging map.
+
+# uses lb = -1, ub = 1.
+function setupproximitymap(focus_center::T, focus_radius::T;
+    input_range_percentage = 0.9,
+    scale::T = one(T)) where T <: Real
+
+    @assert focus_radius < 1
+    @assert -1 < focus_center < 1
+
+    c::T = input_range_percentage*2
+
+    focus_lower = focus_center - focus_radius
+    focus_upper = focus_center + focus_radius
+
+    xs, ys, ms, bs, len_s, len_z = MonotoneMaps.getpiecewiselines([ focus_lower; ], [ focus_upper; ], c)
+    f = xx->MonotoneMaps.evalpiecewise2Dlinearfunc(xx, xs, ys, ms, bs)*scale
+    finv = xx->MonotoneMaps.evalinversepiecewise2Dlinearfunc(xx/scale, xs, ys, ms, bs)
+
+    return f, finv
+end
+
+function setupproximitymapsitp(focus_lb::T, focus_ub::T, focus_radius::T;
+    input_range_percentage::T = 0.9,
+    scale::T = one(T)) where T <: Real
+
+    @assert (focus_ub-focus_lb) > focus_radius
+
+    focus_center = focus_lb + focus_radius
+    f1, finv1 = setupproximitymap(focus_center, focus_radius;
+        input_range_percentage = input_range_percentage,
+        scale = scale)
+
+    focus_center = focus_ub - focus_radius
+    f2, finv2 = setupproximitymap(focus_center, focus_radius;
+        input_range_percentage = input_range_percentage,
+        scale = scale)
+
+    #
+    f = itpproximitymap(f1, f2, focus_center)
+
+    return f
+end
+
+# function evallinearitp(x::T, x1::T, y1::T, x2::T, y2::T)::T where T
+#     return (y1*(x2-x) + y2*(x-x1))/(x2-x1)
+# end
+
+function itpproximitymap(f1, f2, y::T) where T
+    f2_t = f2(t)
+    f1_t = f1(t)
+
+    a = (f2_t - y) / (f2_t - f1_t)
+    if f1_t > y
+        a = zero(T)
+    else
+        f2_t < y
+        a = one(T)
+    end
+
+    f = tt->(a*f1(tt) + (1-a)*f2(t))
+
+    return f
 end

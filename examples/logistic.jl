@@ -19,22 +19,31 @@ PyPlot.matplotlib["rcParams"][:update](["font.size" => 22, "font.family" => "ser
 
 Random.seed!(25)
 
-a = [1.0; 5.0] # higher makes sharper transition.
-b = [0.0; 2]
-fs = collect( xx->( 1/( 1+exp(-a[i]*(xx-b[i])) ) ) for i = 1:length(a) )
+a = [0.5; 5.0; 1/5] # higher makes sharper transition.
+b = [1.0; 1.0; 1.0] .*1
 
-function evalinvf(y::T, a::T, b::T)::T where T <: Real
+c = [1.0; 1.0; 1.0] # higher makes sharper transition.
+d = [0.0; 0.0; 0.0]
 
-    term = a*b - log(1/y-1)
+fs = collect( xx->( evalf2(evalf1(xx, a[i], b[i]), c[i], c[i]) ) for i = 1:length(a) )
+#fs = collect( xx->( evalf1(0.5*evalf2(xx, a[i], b[i])+0.5, c[i], c[i]) ) for i = 1:length(a) )
 
-    return term/a
+function evalf1(x::T, a, b)::T where T
+    return a*log(x/(1-x))+b
 end
 
-inv_fs = collect( yy->evalinvf(yy, a[i], b[i]) for i = 1:length(a) )
+## algebraic sigmoid function. f: ℝ → [-1, 1]
+# function evalf2(x::T, a, b)::T where T
+#     return (x-b)/sqrt(a+(x-b)^2)
+# end
 
-g = xx->inv_fs[2](fs[1](xx))
+## logistic function. f: ℝ → [-1, 1]
+function evalf2(x::T, a, b)::T where T
+    return 1/(1+exp(-a*(x-b)))
+end
 
-x = LinRange(-3.0, 3.0, 500)
+x = LinRange(0 + 1e-2, 1 - 1e-2, 500)
+#x = LinRange(-30 , 30, 500)
 
 PyPlot.figure(fig_num)
 fig_num += 1
@@ -47,31 +56,3 @@ PyPlot.legend()
 PyPlot.xlabel("x")
 PyPlot.ylabel("f")
 PyPlot.title("target warp func")
-
-unzip(a) = map(x->getfield.(a, x), fieldnames(eltype(a)))
-y = LinRange(1e-5, 1-1e-5, 500)
-
-PyPlot.figure(fig_num)
-fig_num += 1
-
-for i = 1:length(inv_fs)
-
-    PyPlot.plot(y, inv_fs[i].(y), label = "inv f[$(i)]")
-end
-
-PyPlot.legend()
-PyPlot.xlabel("y")
-PyPlot.ylabel("inv f")
-PyPlot.title("inverse")
-
-
-
-PyPlot.figure(fig_num)
-fig_num += 1
-
-PyPlot.plot(x, g.(x), label = "g")
-
-PyPlot.legend()
-PyPlot.xlabel("x")
-PyPlot.ylabel("g")
-PyPlot.title("composite")
