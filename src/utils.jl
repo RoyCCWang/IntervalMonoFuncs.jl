@@ -19,15 +19,20 @@ unzip(a) = map(x->getfield.(a, x), fieldnames(eltype(a)))
 
 ##### experimental.
 
-function intervalsigmoid(x::T, a, b)::T where T <: Real
+"""
+    evalcompositelogisticprobit(x::T, a, b)::T where T <: Real
+
+evaluates the map from (0,1) to (0,1).
+returns 1/(1 + exp(-a*(log(x/(1-x))-b)))
+"""
+function evalcompositelogisticprobit(x::T, a, b)::T where T <: Real
 
     return 1/(1 + exp(-a*(log(x/(1-x))-b)))
 end
 
 function prepareboxboundwarping(p_lb::T, p_ub::T, window::T;
     N_itp_samples::Int = 10,
-    input_range_percentage::T = 0.9,
-    scale::T = 1.0) where T
+    input_range_percentage::T = 0.9) where T
 
     #ϵ = window/100
 
@@ -38,7 +43,6 @@ function prepareboxboundwarping(p_lb::T, p_ub::T, window::T;
     ub = one(T)
     c = input_range_percentage*(ub-lb)
 
-    fs = Vector{Function}(undef, length(p_range))
     infos = Vector{Piecewise2DLineType{T}}(undef, length(p_range))
     zs = Vector{Vector{T}}(undef, length(p_range))
 
@@ -48,13 +52,12 @@ function prepareboxboundwarping(p_lb::T, p_ub::T, window::T;
         z_fin = [p + window;]
 
         xs, ys, ms, bs, len_s, len_z = getpiecewiselines(z_st, z_fin, c; lb = lb, ub = ub)
-        fs[i] = xx->evalpiecewise2Dlinearfunc(xx, xs, ys, ms, bs)*scale
-
         infos[i] = Piecewise2DLineType(xs, ys, ms, bs, len_s, len_z)
+
         zs[i] = [z_st[1]; z_fin[1]]
     end
 
-    return fs, infos, zs
+    return infos, zs
 end
 
 
@@ -102,15 +105,40 @@ function costfunc(t_range, f, p::Vector{T})::T where T
 
     s = zero(T)
     for (i,t) in enumerate(t_range)
-        s += ( f(t) - intervalsigmoid(t, p[1], p[2]) )^2
+        s += ( f(t) - evalcompositelogisticprobit(t, p[1], p[2]) )^2
     end
 
     return s
 end
 
+"""
+    getcompactsigmoidparameters(infos::Vector{MonotoneMaps.Piecewise2DLineType{T}};
+        N_fit_positions::Int = 15,
+        max_iters = 5000,
+        xtol_rel = 1e-5,
+        ftol_rel = 1e-5,
+        maxtime = Inf,
+        p0 = [0.5; 0.0],
+        p_lb = [0.1; -5.0],
+        p_ub = [0.6; 5.0]
 
-function getcompactsigmoidparameters(fs, infos::Vector{MonotoneMaps.Piecewise2DLineType{T}};
-    M::Int = 15,
+Given a set of single region piece-wise linear function parameter objects, infos, fit the `a` and `b` parameters of the compact sigmoid (see function `evalcompositelogisticprobit`) for each piece-wise linear function.
+
+∀ i ∈ [length(infos)], infos[i].xs must be 4 elements, with the first and last being the boundary, and the second and third being the end points of the single region.
+
+p0, p_lb, p_ub are two element 1-D arrays. The first element relates to
+...
+# Select arguments
+Two-element 1-D array for the following. The first entry relates to the a parameter, and the second relates to the b parameter.
+- `p0::Vector{T}`: initial guess to the optimization.
+- `p_lb::Vector{T}`: lower bounds to the optimization.
+- `p_ub::Vector{T}`: upper bounds to the optimization.
+...
+
+See optim.jl in the examples folder for usage details.
+"""
+function getcompactsigmoidparameters(infos::Vector{MonotoneMaps.Piecewise2DLineType{T}};
+    N_fit_positions::Int = 15,
     max_iters = 5000,
     xtol_rel = 1e-5,
     ftol_rel = 1e-5,
@@ -119,6 +147,8 @@ function getcompactsigmoidparameters(fs, infos::Vector{MonotoneMaps.Piecewise2DL
     p_lb = [0.1; -5.0],
     p_ub = [0.6; 5.0]) where T
 
+    fs = collect( xx->evalpiecewise2Dlinearfunc(xx, infos[i]) for i = 1:length(infos) )
+
     L = length(fs)
     gs = Vector{Function}(undef, L)
     p_star_set = Vector{Vector{T}}(undef, L)
@@ -126,7 +156,7 @@ function getcompactsigmoidparameters(fs, infos::Vector{MonotoneMaps.Piecewise2DL
 
     for l = 1:L
 
-        t_range = LinRange(infos[l].xs[2], infos[l].xs[3], M)
+        t_range = LinRange(infos[l].xs[2], infos[l].xs[3], N_fit_positions)
 
         g = pp->costfunc(t_range, fs[l], pp)
         dg = xx->Zygote.gradient(f, xx)
