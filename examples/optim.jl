@@ -25,11 +25,11 @@ p_lb = 0.0
 p_ub = 1.0
 window = 0.1
 N_itp_samples = 10
-input_range_percentage = 0.9
+input_range_percentage = 0.7 #0.9
 fs, infos, zs = MonotoneMaps.prepareboxboundwarping(p_lb, p_ub, window; N_itp_samples = N_itp_samples, input_range_percentage = input_range_percentage)
 
 
-display_t = LinRange(0.0, 1.0, 500)
+display_t = LinRange(0.0, 1.0, 5000)
 
 PyPlot.figure(fig_num)
 fig_num += 1
@@ -41,8 +41,6 @@ end
 PyPlot.xlabel("x")
 PyPlot.ylabel("fs")
 PyPlot.title("piece-wise linear warp funcs")
-
-
 
 p0 = [0.5; 0.0]
 p_lb = [0.1; -5.0]
@@ -70,3 +68,6 @@ PyPlot.title("target vs fit")
 for l = 1:length(costfuncs)
     println("cost of p_star $(l) is ", costfuncs[l](minxs[l]))
 end
+
+#
+#getcompactsigmoidparameters(qs, infos;)

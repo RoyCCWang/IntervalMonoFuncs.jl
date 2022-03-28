@@ -119,7 +119,6 @@ function getcompactsigmoidparameters(fs, infos::Vector{MonotoneMaps.Piecewise2DL
     p_lb = [0.1; -5.0],
     p_ub = [0.6; 5.0]) where T
 
-    #
     L = length(fs)
     gs = Vector{Function}(undef, L)
     p_star_set = Vector{Vector{T}}(undef, L)

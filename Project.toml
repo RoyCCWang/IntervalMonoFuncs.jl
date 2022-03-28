@@ -3,6 +3,9 @@ uuid = "4c44cab3-685a-4d4f-a3f2-2eeea13c7f9a"
 authors = ["Roy Wang <rwang013@uottawa.ca> and contributors"]
 version = "0.1.0"
 
+[deps]
+NLopt = "76087f3c-5699-56af-9a33-bf431cd00edd"
+
 [compat]
 julia = "1"
 

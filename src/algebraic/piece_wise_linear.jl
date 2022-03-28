@@ -60,6 +60,10 @@ function getpiecewiselines(z_st::Vector{T}, z_fin::Vector{T}, c::T;
 
     xs, ys, ms, bs = buildtransitionpts(lb, ub, m0, m_zones, z_st, z_fin)
 
+    # numerical sensitive when z_st or z_fin contains lb or ub as an element.
+    clamp!(xs, lb, ub)
+    clamp!(ys, lb, ub)
+
     return xs, ys, ms, bs, len_s, len_z
 end
 
