@@ -143,6 +143,7 @@ function getcompactsigmoidparameters(infos::Vector{MonotoneMaps.Piecewise2DLineT
     xtol_rel = 1e-5,
     ftol_rel = 1e-5,
     maxtime = Inf,
+    optim_algorithm = :GN_ESCH,
     p0 = [0.5; 0.0],
     p_lb = [0.1; -5.0],
     p_ub = [0.6; 5.0]) where T
@@ -161,7 +162,7 @@ function getcompactsigmoidparameters(infos::Vector{MonotoneMaps.Piecewise2DLineT
         g = pp->costfunc(t_range, fs[l], pp)
         dg = xx->Zygote.gradient(f, xx)
 
-        optim_algorithm = :GN_ESCH
+        
         opt = NLopt.Opt(optim_algorithm, length(p0))
 
         minf, minx, ret, N_evals = runNLopt!(opt,
