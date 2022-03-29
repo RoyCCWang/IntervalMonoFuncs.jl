@@ -57,7 +57,7 @@ function prepareboxboundwarping(p_lb::T, p_ub::T, window::T;
         zs[i] = [z_st[1]; z_fin[1]]
     end
 
-    return infos, zs
+    return infos, zs, p_range
 end
 
 

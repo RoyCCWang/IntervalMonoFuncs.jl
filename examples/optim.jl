@@ -27,7 +27,7 @@ p_ub = 1.0
 window = 0.1
 N_itp_samples = 10
 input_range_percentage = 0.7 #0.9
-infos, zs = MonotoneMaps.prepareboxboundwarping(p_lb, p_ub, window; N_itp_samples = N_itp_samples, input_range_percentage = input_range_percentage)
+infos, zs, p_range = MonotoneMaps.prepareboxboundwarping(p_lb, p_ub, window; N_itp_samples = N_itp_samples, input_range_percentage = input_range_percentage)
 
 fs = collect( xx->MonotoneMaps.evalpiecewise2Dlinearfunc(xx, infos[i]) for i = 1:length(infos) )
 
