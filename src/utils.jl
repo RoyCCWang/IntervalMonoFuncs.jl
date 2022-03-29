@@ -133,7 +133,10 @@ Two-element 1-D array for the following. The first entry relates to the a parame
 - `p0::Vector{T}`: initial guess to the optimization.
 - `p_lb::Vector{T}`: lower bounds to the optimization.
 - `p_ub::Vector{T}`: upper bounds to the optimization.
+- `optim_algorithm::Symbol` can be :GN_ESCH, :GN_ISRES, :LN_BOBYQA, :GN_DIRECT_L
+
 ...
+
 
 See optim.jl in the examples folder for usage details.
 """
@@ -143,7 +146,7 @@ function getcompactsigmoidparameters(infos::Vector{MonotoneMaps.Piecewise2DLineT
     xtol_rel = 1e-5,
     ftol_rel = 1e-5,
     maxtime = Inf,
-    optim_algorithm = :GN_ESCH,
+    optim_algorithm::Symbol = :GN_ESCH,
     p0 = [0.5; 0.0],
     p_lb = [0.1; -5.0],
     p_ub = [0.6; 5.0]) where T

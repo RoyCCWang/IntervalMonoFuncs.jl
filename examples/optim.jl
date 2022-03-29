@@ -50,8 +50,8 @@ PyPlot.title("piece-wise linear warp funcs")
 p0 = [0.5; 0.0]
 p_lb = [0.1; -5.0]
 p_ub = [0.6; 5.0]
-
-costfuncs, minxs, rets = MonotoneMaps.getcompactsigmoidparameters(infos; p0 = p0, p_lb = p_lb, p_ub = p_ub)
+optim_algorithm = :LN_BOBYQA
+costfuncs, minxs, rets = MonotoneMaps.getcompactsigmoidparameters(infos; p0 = p0, p_lb = p_lb, p_ub = p_ub, optim_algorithm = optim_algorithm)
 qs = collect( tt->MonotoneMaps.evalcompositelogisticprobit(tt, minxs[i][1], minxs[i][2]) for i = 1:length(minxs) )
 
 
