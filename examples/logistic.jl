@@ -79,3 +79,7 @@ PyPlot.legend()
 PyPlot.xlabel("x")
 PyPlot.ylabel("q")
 PyPlot.title("evalcompositelogisticprobit()")
+
+
+
+## inverse.

@@ -391,3 +391,35 @@ function itpproximitymap(f1, f2, y::T) where T
 
     return f
 end
+
+#####################
+
+function getendomorphismpiecewiselinear(p_lb::T, p_ub::T, window::T;
+    N_itp_samples::Int = 10,
+    input_range_percentage::T = 0.9) where T
+
+    #ϵ = window/100
+
+    #p_range = LinRange(p_lb + window + ϵ, p_ub - window - ϵ, N_itp_samples)
+    p_range = LinRange(p_lb + window, p_ub - window, N_itp_samples)
+
+    lb = zero(T)
+    ub = one(T)
+    c = input_range_percentage*(ub-lb)
+
+    infos = Vector{Piecewise2DLineType{T}}(undef, length(p_range))
+    zs = Vector{Vector{T}}(undef, length(p_range))
+
+    for (i,p) in enumerate(p_range)
+
+        z_st = [p - window;]
+        z_fin = [p + window;]
+
+        xs, ys, ms, bs, len_s, len_z = getpiecewiselines(z_st, z_fin, c; lb = lb, ub = ub)
+        infos[i] = Piecewise2DLineType(xs, ys, ms, bs, len_s, len_z)
+
+        zs[i] = [z_st[1]; z_fin[1]]
+    end
+
+    return infos, zs, p_range
+end

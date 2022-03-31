@@ -8,7 +8,10 @@ import NLopt
 
 
 
-include("../src/algebraic/piece_wise_linear.jl")
+include("../src/endomorphisms/piece_wise_linear.jl")
+include("../src/endomorphisms/composite_sigmoid.jl")
+
+include("../src/fit/fit_to_linear.jl")
 
 include("../src/utils.jl")
 
