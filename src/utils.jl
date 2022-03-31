@@ -24,10 +24,23 @@ unzip(a) = map(x->getfield.(a, x), fieldnames(eltype(a)))
 
 evaluates the map from (0,1) to (0,1).
 returns 1/(1 + exp(-a*(log(x/(1-x))-b)))
+
+
+    evalcompositelogisticprobit(x::T, a, b, lb, ub)::T where T <: Real
+evaluates the map from (lb, ub) to (lb, ub), by mapping (lb,ub) to (0,1), run evalcompositelogisticprobit(), then map (0,1) to (lb,ub).    
 """
 function evalcompositelogisticprobit(x::T, a, b)::T where T <: Real
 
     return 1/(1 + exp(-a*(log(x/(1-x))-b)))
+end
+
+function evalcompositelogisticprobit(x_inp::T, a, b, lb, ub)::T where T <: Real
+
+    x = convertcompactdomain(x_inp, lb, ub, zero(T), one(T))
+    y = 1/(1 + exp(-a*(log(x/(1-x))-b)))
+    y_out = convertcompactdomain(y, zero(T), one(T), lb, ub)
+
+    return y_out
 end
 
 function prepareboxboundwarping(p_lb::T, p_ub::T, window::T;
@@ -185,4 +198,10 @@ function getcompactsigmoidparameters(infos::Vector{MonotoneMaps.Piecewise2DLineT
     end
 
     return gs, p_star_set, rets
+end
+
+
+function convertcompactdomain(x::T, a::T, b::T, c::T, d::T)::T where T <: Real
+
+    return (x-a)*(d-c)/(b-a)+c
 end

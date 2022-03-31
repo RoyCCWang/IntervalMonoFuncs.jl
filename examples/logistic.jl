@@ -1,7 +1,6 @@
 # explore warping functions.
 
-# include("../src/MonotoneMaps.jl")
-# import .MonotoneMaps
+
 
 using FFTW
 import PyPlot
@@ -56,3 +55,27 @@ PyPlot.legend()
 PyPlot.xlabel("x")
 PyPlot.ylabel("f")
 PyPlot.title("target warp func")
+
+
+##### streamline evalf2 ∘ evalf1.
+
+include("../src/MonotoneMaps.jl")
+import .MonotoneMaps
+
+
+q = tt->MonotoneMaps.evalcompositelogisticprobit(tt, 0.25, 0.83, -1.0, 1.0)
+
+
+x = LinRange(-1 + 1e-2, 1 - 1e-2, 500)
+
+PyPlot.figure(fig_num)
+fig_num += 1
+
+ax = PyPlot.axes()
+ax[:set_ylim]([-1,1])
+PyPlot.plot(x, q.(x), label = "q")
+
+PyPlot.legend()
+PyPlot.xlabel("x")
+PyPlot.ylabel("q")
+PyPlot.title("evalcompositelogisticprobit()")
