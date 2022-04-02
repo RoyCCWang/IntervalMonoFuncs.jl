@@ -7,7 +7,7 @@ returns 1/(1 + exp(-a*(log(x/(1-x))-b)))
 
 
     evalcompositelogisticprobit(x::T, a, b, lb, ub)::T where T <: Real
-evaluates the map from (lb, ub) to (lb, ub), by mapping (lb,ub) to (0,1), run evalcompositelogisticprobit(), then map (0,1) to (lb,ub).    
+evaluates the map from (lb, ub) to (lb, ub), by mapping (lb,ub) to (0,1), run evalcompositelogisticprobit(), then map (0,1) to (lb,ub).
 """
 function evalcompositelogisticprobit(x::T, a, b)::T where T <: Real
 
@@ -17,18 +17,23 @@ end
 function evalcompositelogisticprobit(x_inp::T, a, b, lb, ub)::T where T <: Real
 
     x = convertcompactdomain(x_inp, lb, ub, zero(T), one(T))
-    y = 1/(1 + exp(-a*(log(x/(1-x))-b)))
+    y = evalcompositelogisticprobit(x, a, b)
     y_out = convertcompactdomain(y, zero(T), one(T), lb, ub)
 
     return y_out
 end
 
-function evalinversecompositelogisticprobit(y::T, a, b) where T <: Real
+function evalinversecompositelogisticprobit(y::T, a, b)::T where T <: Real
+    return exp(b)/(exp(b) + (-1 + 1/y)^(1/a))
+end
 
-    #
+function evalinversecompositelogisticprobit(y_inp::T, a, b, lb, ub)::T where T <: Real
 
+    y = convertcompactdomain(y_inp, lb, ub, zero(T), one(T))
+    x = evalinversecompositelogisticprobit(y, a, b)
+    x_out = convertcompactdomain(x, zero(T), one(T), lb, ub)
 
-    return nothing
+    return x_out
 end
 
 function eval1Dnumericalinverse(f::Function,
@@ -37,7 +42,7 @@ function eval1Dnumericalinverse(f::Function,
     a::T,
     b::T,
     max_iters::Int) where T <: Real
-    
+
     @assert a < b
 
     obj_func = xx->((f(xx[1])-y)^2)::T
