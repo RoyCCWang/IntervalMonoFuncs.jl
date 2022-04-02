@@ -19,127 +19,118 @@ PyPlot.matplotlib["rcParams"][:update](["font.size" => 22, "font.family" => "ser
 
 Random.seed!(25)
 
-a = [1.0; 20.0]
-b = [1.0; 1.0]
-fs = collect( xx->(1/sqrt(a[i]+(xx-b[i])^2)^3) for i = 1:length(a) )
-int_fs = collect( xx->((xx-b[i])/sqrt(a[i]+(xx-b[i])^2)^3) for i = 1:length(a) )
+# a = [1.0; 20.0]
+# b = [1.0; 1.0]
+# fs = collect( xx->(1/sqrt(a[i]+(xx-b[i])^2)^3) for i = 1:length(a) )
+# int_fs = collect( xx->((xx-b[i])/sqrt(a[i]+(xx-b[i])^2)^3) for i = 1:length(a) )
+# function evalinvf(y::T, a::T, b::T)::Tuple{T,T} where T <: Real
+#
+#     term = 1/(sqrt(y)^3) - a
+#
+#     return b - term, b + term
+# end
+# unzip(a) = map(x->getfield.(a, x), fieldnames(eltype(a)))
+# y = LinRange(-1+1e-5, 1-1e-5, 500)
+# #
+# PyPlot.figure(fig_num)
+# fig_num += 1
+# for i = 1:length(inv_fs)
+#     x1, x2 = unzip(inv_fs[i].(y))
+#
+#     PyPlot.plot(y, x1, label = "x1, inv f[$(i)]")
+# end
+# PyPlot.legend()
+# PyPlot.xlabel("y")
+# PyPlot.ylabel("inv f")
+# PyPlot.title("inverse")
 
-function evalinvf(y::T, a::T, b::T)::Tuple{T,T} where T <: Real
+function evalg(x::T, w::Vector{T}, zs::Vector{T}, bs::Vector{T})::T where T <: Real
 
-    term = 1/(sqrt(y)^3) - a
+    out = zero(T)
+    for i = 1:length(zs)
+        τ = x-zs[i]
+        out += w[i]*τ/sqrt(bs[i] + τ^2)
+    end
 
-    return b - term, b + term
+    return out
 end
 
-inv_fs = collect( yy->evalinvf(yy, a[i], b[i]) for i = 1:length(a) )
+function evalZ(α::T, β::T, w::Vector{T}, zs::Vector{T}, bs::Vector{T})::T where T <: Real
+
+    return evalg(β, w, zs, bs) - evalg(α, w, zs, bs)
+end
+
+function evalB(α::T, w::Vector{T}, zs::Vector{T}, bs::Vector{T}, Z::T)::T where T <: Real
+
+    return evalg(α, w, zs, bs)/Z
+end
+
+function evalCDF(x::T, B::T, Z::T, w::Vector{T}, zs::Vector{T}, bs::Vector{T})::T where T <: Real
+    return evalg(x, w, zs, bs)/Z - B
+end
+
+function evalPDF(x::T, w::Vector{T}, zs::Vector{T}, bs::Vector{T}, Z)::T where T <: Real
+
+    return sum( w[n]*bs[n]/sqrt(bs[n]+(x-zs[n])^2 )^3 for n = 1:length(bs) )/Z
+end
+
+function convertcompactdomain(x::T, a::T, b::T, c::T, d::T)::T where T <: Real
+
+    return (x-a)*(d-c)/(b-a)+c
+end
 
 
+lb = -3.0
+ub = 4.0
 
-x = LinRange(-3.0, 3.0, 500)
+L = 5
+zs = collect( convertcompactdomain(rand(), 0.0, 1.0, lb, ub) for l = 1:L )
+bs = rand(L) .* 5.0
+w = rand(L) .* 7.0
+
+Z = evalZ(lb, ub, w, zs, bs)
+B = evalB(lb, w, zs, bs, Z)
+CDF_func = xx->evalCDF(xx, B, Z, w, zs, bs)
+PDF_func = xx->evalPDF(xx, w, zs, bs, Z)
+
+
+### visualize.
+
+x = LinRange(lb, ub, 500)
 
 PyPlot.figure(fig_num)
 fig_num += 1
 
-for i = 1:length(fs)
-    PyPlot.plot(x, fs[i].(x), label = "f[$(i)]")
-end
+PyPlot.plot(x, CDF_func.(x))
+
 
 PyPlot.legend()
 PyPlot.xlabel("x")
-PyPlot.ylabel("f")
-PyPlot.title("target warp func")
-
-unzip(a) = map(x->getfield.(a, x), fieldnames(eltype(a)))
-y = LinRange(-1+1e-5, 1-1e-5, 500)
-
-PyPlot.figure(fig_num)
-fig_num += 1
-
-for i = 1:length(inv_fs)
-    x1, x2 = unzip(inv_fs[i].(y))
-
-    PyPlot.plot(y, x1, label = "x1, inv f[$(i)]")
-end
-
-PyPlot.legend()
-PyPlot.xlabel("y")
-PyPlot.ylabel("inv f")
-PyPlot.title("inverse")
+PyPlot.ylabel("Q inv")
+PyPlot.title("CDF")
 
 
 PyPlot.figure(fig_num)
 fig_num += 1
 
-for i = 1:length(int_fs)
+PyPlot.plot(x, PDF_func.(x))
 
-    PyPlot.plot(x, int_fs[i].(x), label = "int f[$(i)]")
-end
 
 PyPlot.legend()
-PyPlot.xlabel("y")
-PyPlot.ylabel("int f")
-PyPlot.title("integral")
+PyPlot.xlabel("x")
+PyPlot.ylabel("p(x)")
+PyPlot.title("PDF")
 
-@assert 1==2
-import NLopt
-
+###### NiLang goes here.
 
 
-function genericNLoptcostfunc!(x::Vector{T}, df_x, f, df)::T where T <: Real
+function evalg2(x::T, w::Vector{T}, zs::Vector{T}, bs::Vector{T})::T where T <: Real
 
-    if length(df_x) > 0
-        df_x[:] = df(x)
+    out = zero(T)
+    for i = 1:length(zs)
+        τ = x-zs[i]
+        out += w[i]*τ/sqrt(bs[i] + τ^2)
     end
 
-    return f(x)
+    return out
 end
-
-function evalalgebraicsigmoid(x, a, b)
-    return (x[1]-b[1])/sqrt(a[1]+(x[1]-b[1])^2)
-end
-
-a = [1.0;]
-b = [0.0;]
-
-f = xx->evalalgebraicsigmoid(xx, a, b)
-
-domain_lb = 0.5
-g = aa->(evalalgebraicsigmoid(-1.0, aa, b)-range_lb)
-# using ChainRules
-# function evaldf(x)
-#
-#     a, a_pullback = rrule(sin, x);
-#     b, b_pullback = rrule(+, 0.2, a);
-#     c, c_pullback = rrule(asin, b)
-#
-#     #### Then the backward pass calculating gradients
-#     c̄ = 1;                    # ∂c/∂c
-#     _, b̄ = c_pullback(c̄);     # ∂c/∂b = ∂c/∂b ⋅ ∂c/∂c
-#     _, _, ā = b_pullback(b̄);  # ∂c/∂a = ∂c/∂b ⋅ ∂b/∂a
-#     _, x̄ = a_pullback(ā);     # ∂c/∂x = ∂c/∂a ⋅ ∂a/∂x
-#     return x̄                         # ∂c/∂x = ∂foo/∂x
-# end
-
-import Zygote
-
-dg = xx->Zygote.gradient(f, xx)
-
-p0 = ones(1)
-p_lb = [1e-5;]
-p_ub = [50.0;]
-
-optim_algorithm = :GN_ESCH
-#optim_algorithm = :LN_BOBYQA
-
-opt = NLopt.Opt(optim_algorithm, 1)
-
-minf, minx, ret, N_evals = runNLopt!(opt,
-    p0,
-    g,
-    dg,
-    p_lb,
-    p_ub;
-    max_iters = 5000,
-    xtol_rel = 1e-5,
-    ftol_rel = 1e-5,
-    maxtime = Inf)
