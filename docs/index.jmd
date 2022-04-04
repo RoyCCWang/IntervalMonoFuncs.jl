@@ -1,0 +1,60 @@
+# Library description
+
+This library provides:
+1. a collection of parametric monotonic functions from finite intervals on $\mathbb{R}$ to itself (an endomorphism).
+2. Given endpoints of non-overlapping intervals, return a piece-wise linear map and a smooth approximation to it that transports the uniform distribution to a piece-wise constant distribution. The application for this is in optimization. See example here.
+
+## Future
+- Transformations of more general domains/range that are isomorphic to $\mathbb{R}$ might be added in the future.
+
+## Getting Started
+Add (currently) unregistered public Julia package for dependency before installing NMRSpectraSimulator.jl
+```
+import Pkg
+Pkg.add(path="https://github.com/RoyCCWang/MonotoneMaps.jl")
+
+```
+
+To update this package once it is installed, just do
+```
+Pkg.update("MonotoneMaps")
+```
+
+## Piece-wise linear function
+Our definition of the indicator function in this work is 
+
+$1_{a,b}\left(x\right):=\begin{cases}
+1 & \text{if }x\in\left[a,b\right]\subset\mathbb{R},\\
+0 & \text{otherwise.}
+\end{cases}$
+
+Given a positive number $s$, a compression parameter $c\in\left(0,2s\right)$,
+non-overlapping intervals in $\left(-s,s\right)\subset\mathbb{R}$
+as parameterized by the set of endpoints $\left\{ a_{l},b_{l}\right\} $,
+our piece-wise linear map $\left[-s,s\right]\rightarrow\left[-s,s\right]$
+is of the form 
+
+$f\left(x\right):=\begin{cases}
+\sum_{l}f_{l}\left(x\right) & \text{if }x\in\left[-s,s\right],\\
+s & \text{if }x>s,\\
+-s & \text{otherwise}.
+\end{cases}$
+
+
+The linear function on interval $l$ is 
+
+$f_{l}\left(x\right):=\sum_{i}\left(m_{l}x+b_{l}\right)1_{a_{l},b_{l}}\left(x\right).$
+
+The choice of $\left\{ m_{l},b_{l}\right\}$ is such that:
+- $f$ is continuous.
+- $\sum_{l}\left(b_{l}-a_{l}\right)=c.$
+- $m_{l}=\frac{d_{l}-c_{l}}{b_{l}-a_{l}}.$
+
+The parameters $\left\{ c_{l},d_{l}\right\}$ define the $l$-th interval in the range of $f$, while $\left\{ a_{l},b_{l}\right\}$ define the domain. The compression $c$ characterizes the slope of
+the linears in the transform $f$. To generalize the domain and range
+of this map from $\left[-1,1\right]$ to $\left[-s,s\right]$, use
+$\frac{x}{s}$ as the input to the map $f$, and rescale the output
+by $s$, e.g. $sf\left(\frac{x}{s}\right)$ is the final output.
+
+
+ see the [piece-wise linear example](piece-wise_linear.html) for usage.

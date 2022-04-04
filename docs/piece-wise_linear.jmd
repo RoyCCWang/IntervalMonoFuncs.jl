@@ -1,0 +1,58 @@
+# Piece-wise linear usage example
+
+From two pairs of endpoints, a compression parameter, and scale parameter, we get the piece-wise linear function, its inverse, and a monotonically interpolated smooth surrogate using [NMRDataSetup.jl](https://github.com/JuliaMath/Interpolations.jl).
+
+
+Load required packages and set up random seed.
+```julia; results="hidden"
+import MonotoneMaps
+import PyPlot
+import Random
+using LinearAlgebra
+import Interpolations
+Random.seed!(25)
+```
+
+The user-specified parameters with 95% of the domain $[-1,1]$ of the piece-wise linear function we want to map to an interval defined by $\left\{ c_{l},d_{l}\right\}$.
+```julia; results="hidden"
+z_st = [-0.82; 0.59] # This is {c_l} in notes.
+z_fin = [0.044; 0.97] # This is {d_l} in notes.
+scale = 2.34 # This is s in notes.
+
+# amount of input region used to map to the intervals specified by z_st and z_fin.
+input_range_percentage = 0.95
+
+#c = input_range_percentage*(ub-lb)*scale, lb = -1, ub = 1
+c = input_range_percentage*2
+```
+
+Build the piece-wise linear function, and its inverse. The forward function here is really $sf\left(\frac{x}{s}\right)$, where $s$ is the scale variable.
+```julia; results="hidden"
+xs, ys, ms, bs, len_s, len_z = MonotoneMaps.getpiecewiselines(z_st, z_fin, c)
+h = xx->MonotoneMaps.evalpiecewise2Dlinearfunc(xx, xs, ys, ms, bs, scale)
+hinv = xx->MonotoneMaps.evalinversepiecewise2Dlinearfunc(xx, xs, ys, ms, bs, scale)
+
+```
+
+Visualize.
+```julia; fig_cap="", echo=false
+
+x_range = LinRange(-scale, scale, 5000)
+h_x = h.(x_range)
+hinv_y = finv.(h_x)
+
+fig = PyPlot.figure()
+PyPlot.plot(x_range, h_x)
+PyPlot.xlabel("x")
+PyPlot.ylabel("y")
+PyPlot.title("forward function")
+display(fig)
+
+fig = PyPlot.figure()
+PyPlot.plot(h_x, hinv_y)
+PyPlot.xlabel("y")
+PyPlot.ylabel("x")
+PyPlot.title("inverse function")
+display(fig)
+
+```

@@ -36,6 +36,8 @@ julia> z_fin = [ 0.76; ]
 
 julia> xs, ys, ms, bs, len_s, len_z = MonotoneMaps.getpiecewiselines(z_st, z_fin, c)
 ([-1.0, -0.842857142857143, 0.9571428571428571, 1.0], [-1.0, -0.12, 0.76, 1.0], [5.600000000000001, 0.4888888888888889, 5.600000000000001], [4.600000000000001, 0.29206349206349214, -4.600000000000001], [1.8], [0.88])
+
+See piece-wise_linear.jl in the /examples folder for a two-segment example.
 ```
 """
 function getpiecewiselines(z_st::Vector{T}, z_fin::Vector{T}, c::T;
@@ -67,9 +69,22 @@ function getpiecewiselines(z_st::Vector{T}, z_fin::Vector{T}, c::T;
     return xs, ys, ms, bs, len_s, len_z
 end
 
+
+
 function evalpiecewise2Dlinearfunc(x, A::Piecewise2DLineType{T})::T where T
 
     return evalpiecewise2Dlinearfunc(x, A.xs, A.ys, A.ms, A.bs)
+end
+
+function evalpiecewise2Dlinearfunc(x_inp::T, A::Piecewise2DLineType{T}, scale::T)::T where T
+    return evalpiecewise2Dlinearfunc(x, A.xs, A.ys, A.ms, A.bs, scale)
+end
+
+function evalpiecewise2Dlinearfunc(x_inp::T,
+    xs::Vector{T}, ys::Vector{T}, ms::Vector{T}, bs::Vector{T}, scale::T)::T where T
+
+    x = clamp(x_inp/scale, -one(T), one(T))
+    return evalpiecewise2Dlinearfunc(x, xs, ys, ms, bs)*scale
 end
 
 function evalpiecewise2Dlinearfunc(x::T,
@@ -93,7 +108,18 @@ end
 
 function evalinversepiecewise2Dlinearfunc(y, A::Piecewise2DLineType{T})::T where T
 
-    return evalpiecewise2Dlinearfunc(y, A.xs, A.ys, A.ms, A.bs)
+    return evalinversepiecewise2Dlinearfunc(y, A.xs, A.ys, A.ms, A.bs)
+end
+
+function evalinversepiecewise2Dlinearfunc(x_inp::T, A::Piecewise2DLineType{T}, scale::T)::T where T
+    return evalinversepiecewise2Dlinearfunc(x, A.xs, A.ys, A.ms, A.bs, scale)
+end
+
+function evalinversepiecewise2Dlinearfunc(x_inp::T,
+    xs::Vector{T}, ys::Vector{T}, ms::Vector{T}, bs::Vector{T}, scale::T)::T where T
+
+    x = clamp(x_inp/scale, -one(T), one(T))
+    return evalinversepiecewise2Dlinearfunc(x, xs, ys, ms, bs)*scale
 end
 
 function evalinversepiecewise2Dlinearfunc(y::T,
@@ -173,6 +199,33 @@ function findx2Dline(m::T, b::T, y::T)::T where T
     return (y-b)/m
 end
 
+"""
+example usage:
+D = 5 #2 # number of regions.
+lb = -1
+ub = 1
+scale = 1.0 #0.5
+
+# amount of input region used to map to z_lens.
+input_range_percentage = 0.95
+c = input_range_percentage*(ub-lb)
+
+# generate random boundary points that define the regions.
+rand_gen_func = xx->MonotoneMaps.convertcompactdomain(xx, 0.0, 1.0, scale*lb, scale*ub)
+z = sort(collect(rand_gen_func(rand()) for d = 1:D))
+
+# sums to c.
+z_lens = ones(D) .* 2.0 #0.2
+z_lens = z_lens .* (c/sum(z_lens))
+
+# process z points.
+z_pts = collect( [z[i]-z_lens[i]/2; z[i]+z_lens[i]/2] for i = 1:D )
+z_st0 = collect( z_pts[i][1] for i = 1:length(z_pts) )
+z_fin0 = collect( z_pts[i][2] for i = 1:length(z_pts) )
+
+# combine intervals such that they are not overlapping.
+z_st, z_fin = MonotoneMaps.mergesuchthatnooverlap(z_st0, z_fin0)
+"""
 function mergesuchthatnooverlap(z_st_in::Vector{T}, z_fin_in::Vector{T};
     lb::T = -one(T), ub::T = one(T),
     portion_for_shift::T = 0.95) where T
