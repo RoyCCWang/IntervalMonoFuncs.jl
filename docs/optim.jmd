@@ -1,0 +1,52 @@
+# Logistic-logit functions for transporting mass from a large coverage to a concentrated coverage
+
+
+Given non-overlapping subintervals in $[-1,1]$, one can fit a piece-wise linear function as described in the [piece-wise linear example](piece-wise_linear.html). The example here offers a manner to devise a family of smoother monotonic functions that is guided by piece-wise linear functions.
+
+In this example, we create piece-wise linear functions that has a single line segment that has a small slope. The interpretation of using such a function as a transport map is to move mass from a large coverage to a concentrated coverage. The intervals in the domain and range that correspond to this segment is the *focus interval*, and is controlled by `range_percentage` and `domain_percentage`. We then fit a logistic-logit function to each of the piece-wise linear functions. The fitted parameters can then be interpolated so that we get a logistic-logit function for any given focus interval.
+
+
+Load required packages and set up random seed.
+```julia; results="hidden"
+import MonotoneMaps
+import PyPlot
+import Random
+using LinearAlgebra
+Random.seed!(25)
+```
+
+The `domain_percentage` parameter specifies how much of the domain is used for the single subinterval in the range to focus on, while the `range_percentage` parameter specifies the absolute amount of the range compression parameter $c$ that was mentioned in the documentation, we use `range_percentage` to control the slope of the single subinterval that we want to focus on. The `p_lb` and `p_ub` variables must be 0 and 1, respectively, because the domain and range of the logistic-probit function are both $(0,1)$. This could change in the future, if other sigmoid-like functions are implemented in this package that operates on a different interval. We construct 10 piece-wise linear functions with the focus subinterval spaced out between `p_lb` and `p_ub`.
+```julia; results="hidden"
+p_lb = 0.0 # this must be 0.
+p_ub = 1.0 # this must be 1.
+range_percentage = 0.1
+N_itp_samples = 10
+domain_percentage = 0.7
+infos, zs, p_range = MonotoneMaps.getendomorphismpiecewiselinear(p_lb, p_ub, range_percentage; N_itp_samples = N_itp_samples, domain_percentage = domain_percentage)
+
+# construct the set of piece-wise functions.
+fs = collect( xx->MonotoneMaps.evalpiecewise2Dlinearfunc(xx, infos[i]) for i = 1:length(infos) )
+
+
+```
+
+
+Visualize the piece-wise functions.
+```julia; fig_cap="", echo=false
+
+display_t = LinRange(0.0, 1.0, 5000)
+#wee = fs[2].(display_t)
+
+fig = PyPlot.figure()
+
+for i = length(fs):length(fs)
+    PyPlot.plot(display_t, fs[i].(display_t), label = "f[$(i)]")
+end
+
+PyPlot.legend()
+PyPlot.xlabel("x")
+PyPlot.ylabel("y")
+PyPlot.title("Piece-wise linear functions, each with a single focus subinterval")
+display(fig)
+
+```

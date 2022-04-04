@@ -658,64 +658,51 @@ div.title {text-align: center;}
           
         </div>
 
-        <h1>Library description</h1>
-<p>This library provides:</p>
-<ol>
-<li><p>a collection of parametric monotonic functions from finite intervals on <span class="math">$\mathbb{R}$</span> to itself &#40;an endomorphism&#41;.</p>
-</li>
-<li><p>Given endpoints of non-overlapping intervals, return a piece-wise linear map and a smooth approximation to it that transports the uniform distribution to a piece-wise constant distribution. The application for this is in optimization. See example here.</p>
-</li>
-</ol>
-<h2>Future</h2>
-<ul>
-<li><p>Transformations of more general domains/range that are isomorphic to <span class="math">$\mathbb{R}$</span> might be added in the future.</p>
-</li>
-</ul>
-<h2>Getting Started</h2>
-<p>Add &#40;currently&#41; unregistered public Julia package for dependency before installing NMRSpectraSimulator.jl</p>
-<pre><code>import Pkg
-Pkg.add&#40;path&#61;&quot;https://github.com/RoyCCWang/MonotoneMaps.jl&quot;&#41;
-</code></pre>
-<p>To update this package once it is installed, just do</p>
-<pre><code>Pkg.update&#40;&quot;MonotoneMaps&quot;&#41;</code></pre>
-<h2>Piece-wise linear function</h2>
-<p>Our definition of the indicator function in this work is </p>
-<p class="math">\[
-1_{a,b}\left(x\right):=\begin{cases}
-1 & \text{if }x\in\left[a,b\right]\subset\left[-1,1\right],\\
-0 & \text{otherwise.}
-\end{cases}
-\]</p>
-<p>Given a compression parameter <span class="math">$c\in\left(0,2\right)$</span>, non-overlapping intervals in <span class="math">$\left(-1,1\right)\subset\mathbb{R}$</span> as parameterized by the set of endpoints <span class="math">$\left\{ c_{l},d_{l}\right\} $, our piece-wise linear map $\left[-1,1\right]\rightarrow\left[-1,1\right]$</span> is of the form </p>
-<p class="math">\[
-f\left(x\right):=\begin{cases}
-\sum_{l}f_{l}\left(x\right) & \text{if }x\in\left[-1,1\right],\\
-1 & \text{if }x>s,\\
--1 & \text{otherwise}.
-\end{cases}
-\]</p>
-<p>The linear function on interval <span class="math">$l$</span> is </p>
-<p class="math">\[
-f_{l}\left(x\right):=\left(m_{l}x+b_{l}\right)1_{a_{l},b_{l}}\left(x\right).
-\]</p>
-<p>The choice of <span class="math">$\left\{ m_{l},b_{l}\right\}$</span> is such that:</p>
-<ul>
-<li><p><span class="math">$f$</span> is continuous.</p>
-</li>
-<li><p><span class="math">$\sum_{l}\left(b_{l}-a_{l}\right)=c$</span>.</p>
-</li>
-<li><p><span class="math">$m_{l}=\frac{d_{l}-c_{l}}{b_{l}-a_{l}}$</span>.</p>
-</li>
-</ul>
-<p>The parameters <span class="math">$\left\{ c_{l},d_{l}\right\}$</span> define the <span class="math">$l$</span>-th interval in the range of <span class="math">$f$</span>, while <span class="math">$\left\{ a_{l},b_{l}\right\}$</span> define the domain. The compression <span class="math">$c$</span> characterizes the slope of the linears in the transform <span class="math">$f$</span>. To generalize the domain and range of this map from <span class="math">$\left[-1,1\right]$</span> to <span class="math">$\left[-s,s\right]$</span>, use <span class="math">$\frac{x}{s}$</span> as the input to the map <span class="math">$f$</span>, and rescale the output by <span class="math">$s$</span>, e.g. <span class="math">$sf\left(\frac{x}{s}\right)$</span> is the final output.</p>
-<p>See the <a href="piece-wise_linear.html">piece-wise linear example</a> for usage and one possible application for this type of monotonic transformation. A non-unity scaling is used in this example.</p>
-<p>See the <a href="optim.html">composite sigmoid example</a> for how one can fit smooth sigmoid-like monotonic transforms to a piece-wise linear function that contains only one interval, i.e., <span class="math">$L=1$</span>.</p>
+        <h1>Logistic-logit functions for transporting mass from a large coverage to a concentrated coverage</h1>
+<p>Given non-overlapping subintervals in <span class="math">$[-1,1]$</span>, one can fit a piece-wise linear function as described in the <a href="piece-wise_linear.html">piece-wise linear example</a>. The example here offers a manner to devise a family of smoother monotonic functions that is guided by piece-wise linear functions.</p>
+<p>In this example, we create piece-wise linear functions that has a single line segment that has a small slope. The interpretation of using such a function as a transport map is to move mass from a large coverage to a concentrated coverage. The intervals in the domain and range that correspond to this segment is the <em>focus interval</em>, and is controlled by <code>range_percentage</code> and <code>domain_percentage</code>. We then fit a logistic-logit function to each of the piece-wise linear functions. The fitted parameters can then be interpolated so that we get a logistic-logit function for any given focus interval.</p>
+<p>Load required packages and set up random seed.</p>
+
+
+<pre class='hljl'>
+<span class='hljl-k'>import</span><span class='hljl-t'> </span><span class='hljl-n'>MonotoneMaps</span><span class='hljl-t'>
+</span><span class='hljl-k'>import</span><span class='hljl-t'> </span><span class='hljl-n'>PyPlot</span><span class='hljl-t'>
+</span><span class='hljl-k'>import</span><span class='hljl-t'> </span><span class='hljl-n'>Random</span><span class='hljl-t'>
+</span><span class='hljl-k'>using</span><span class='hljl-t'> </span><span class='hljl-n'>LinearAlgebra</span><span class='hljl-t'>
+</span><span class='hljl-n'>Random</span><span class='hljl-oB'>.</span><span class='hljl-nf'>seed!</span><span class='hljl-p'>(</span><span class='hljl-ni'>25</span><span class='hljl-p'>)</span>
+</pre>
+
+
+
+<p>The <code>domain_percentage</code> parameter specifies how much of the domain is used for the single subinterval in the range to focus on, while the <code>range_percentage</code> parameter specifies the absolute amount of the range compression parameter <span class="math">$c$</span> that was mentioned in the documentation, we use <code>range_percentage</code> to control the slope of the single subinterval that we want to focus on. The <code>p_lb</code> and <code>p_ub</code> variables must be 0 and 1, respectively, because the domain and range of the logistic-probit function are both <span class="math">$(0,1)$</span>. This could change in the future, if other sigmoid-like functions are implemented in this package that operates on a different interval. We construct 10 piece-wise linear functions with the focus subinterval spaced out between <code>p_lb</code> and <code>p_ub</code>.</p>
+
+
+<pre class='hljl'>
+<span class='hljl-n'>p_lb</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nfB'>0.0</span><span class='hljl-t'> </span><span class='hljl-cs'># this must be 0.</span><span class='hljl-t'>
+</span><span class='hljl-n'>p_ub</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nfB'>1.0</span><span class='hljl-t'> </span><span class='hljl-cs'># this must be 1.</span><span class='hljl-t'>
+</span><span class='hljl-n'>range_percentage</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nfB'>0.1</span><span class='hljl-t'>
+</span><span class='hljl-n'>N_itp_samples</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>10</span><span class='hljl-t'>
+</span><span class='hljl-n'>domain_percentage</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nfB'>0.7</span><span class='hljl-t'>
+</span><span class='hljl-n'>infos</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>zs</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>p_range</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>MonotoneMaps</span><span class='hljl-oB'>.</span><span class='hljl-nf'>getendomorphismpiecewiselinear</span><span class='hljl-p'>(</span><span class='hljl-n'>p_lb</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>p_ub</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>range_percentage</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-n'>N_itp_samples</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>N_itp_samples</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>domain_percentage</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>domain_percentage</span><span class='hljl-p'>)</span><span class='hljl-t'>
+
+</span><span class='hljl-cs'># construct the set of piece-wise functions.</span><span class='hljl-t'>
+</span><span class='hljl-n'>fs</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>collect</span><span class='hljl-p'>(</span><span class='hljl-t'> </span><span class='hljl-n'>xx</span><span class='hljl-oB'>-&gt;</span><span class='hljl-n'>MonotoneMaps</span><span class='hljl-oB'>.</span><span class='hljl-nf'>evalpiecewise2Dlinearfunc</span><span class='hljl-p'>(</span><span class='hljl-n'>xx</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>infos</span><span class='hljl-p'>[</span><span class='hljl-n'>i</span><span class='hljl-p'>])</span><span class='hljl-t'> </span><span class='hljl-k'>for</span><span class='hljl-t'> </span><span class='hljl-n'>i</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>1</span><span class='hljl-oB'>:</span><span class='hljl-nf'>length</span><span class='hljl-p'>(</span><span class='hljl-n'>infos</span><span class='hljl-p'>)</span><span class='hljl-t'> </span><span class='hljl-p'>)</span>
+</pre>
+
+
+
+<p>Visualize the piece-wise functions.</p>
+
+<pre class="julia-error">
+ERROR: UndefVarError: fs not defined
+</pre>
+
 
 
         <HR/>
         <div class="footer">
           <p>
-            Published from <a href="index.jmd">index.jmd</a>
+            Published from <a href="optim.jmd">optim.jmd</a>
             using <a href="http://github.com/JunoLab/Weave.jl">Weave.jl</a> v0.10.10 on 2022-04-04.
           </p>
         </div>

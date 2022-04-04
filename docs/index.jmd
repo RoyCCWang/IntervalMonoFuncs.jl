@@ -24,31 +24,33 @@ Pkg.update("MonotoneMaps")
 Our definition of the indicator function in this work is 
 
 $1_{a,b}\left(x\right):=\begin{cases}
-1 & \text{if }x\in\left[a,b\right]\subset\mathbb{R},\\
+1 & \text{if }x\in\left[a,b\right]\subset\left[-1,1\right],\\
 0 & \text{otherwise.}
 \end{cases}$
 
-Given a positive number $s$, a compression parameter $c\in\left(0,2s\right)$,
-non-overlapping intervals in $\left(-s,s\right)\subset\mathbb{R}$
-as parameterized by the set of endpoints $\left\{ a_{l},b_{l}\right\} $,
-our piece-wise linear map $\left[-s,s\right]\rightarrow\left[-s,s\right]$
-is of the form 
+
+Given a compression parameter $c\in\left(0,2\right)$, non-overlapping
+intervals in $\left(-1,1\right)\subset\mathbb{R}$ as parameterized
+by the set of endpoints $\left\{ c_{l},d_{l}\right\} $, our piece-wise
+linear map $\left[-1,1\right]\rightarrow\left[-1,1\right]$ is of
+the form 
 
 $f\left(x\right):=\begin{cases}
-\sum_{l}f_{l}\left(x\right) & \text{if }x\in\left[-s,s\right],\\
-s & \text{if }x>s,\\
--s & \text{otherwise}.
+\sum_{l}f_{l}\left(x\right) & \text{if }x\in\left[-1,1\right],\\
+1 & \text{if }x>s,\\
+-1 & \text{otherwise}.
 \end{cases}$
 
 
 The linear function on interval $l$ is 
 
-$f_{l}\left(x\right):=\sum_{i}\left(m_{l}x+b_{l}\right)1_{a_{l},b_{l}}\left(x\right).$
+$f_{l}\left(x\right):=\left(m_{l}x+b_{l}\right)1_{a_{l},b_{l}}\left(x\right).$
+
 
 The choice of $\left\{ m_{l},b_{l}\right\}$ is such that:
-- $f$ is continuous.
-- $\sum_{l}\left(b_{l}-a_{l}\right)=c.$
-- $m_{l}=\frac{d_{l}-c_{l}}{b_{l}-a_{l}}.$
+*  $f$ is continuous.
+*  $\sum_{l}\left(b_{l}-a_{l}\right)=c$.
+*  $m_{l}=\frac{d_{l}-c_{l}}{b_{l}-a_{l}}$.
 
 The parameters $\left\{ c_{l},d_{l}\right\}$ define the $l$-th interval in the range of $f$, while $\left\{ a_{l},b_{l}\right\}$ define the domain. The compression $c$ characterizes the slope of
 the linears in the transform $f$. To generalize the domain and range
@@ -57,4 +59,7 @@ $\frac{x}{s}$ as the input to the map $f$, and rescale the output
 by $s$, e.g. $sf\left(\frac{x}{s}\right)$ is the final output.
 
 
- see the [piece-wise linear example](piece-wise_linear.html) for usage.
+See the [piece-wise linear example](piece-wise_linear.html) for usage and one possible application for this type of monotonic transformation. A non-unity scaling is used in this example.
+
+
+See the [composite sigmoid example](optim.html) for how one can fit smooth sigmoid-like monotonic transforms to a piece-wise linear function that contains only one interval, i.e., $L=1$.

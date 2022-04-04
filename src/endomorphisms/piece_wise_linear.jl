@@ -37,7 +37,7 @@ julia> z_fin = [ 0.76; ]
 julia> xs, ys, ms, bs, len_s, len_z = MonotoneMaps.getpiecewiselines(z_st, z_fin, c)
 ([-1.0, -0.842857142857143, 0.9571428571428571, 1.0], [-1.0, -0.12, 0.76, 1.0], [5.600000000000001, 0.4888888888888889, 5.600000000000001], [4.600000000000001, 0.29206349206349214, -4.600000000000001], [1.8], [0.88])
 
-See piece-wise_linear.jl in the /examples folder for a two-segment example.
+See piece-wise_linear.jl in the /examples folder for an example.
 ```
 """
 function getpiecewiselines(z_st::Vector{T}, z_fin::Vector{T}, c::T;
@@ -80,6 +80,30 @@ function evalpiecewise2Dlinearfunc(x_inp::T, A::Piecewise2DLineType{T}, scale::T
     return evalpiecewise2Dlinearfunc(x, A.xs, A.ys, A.ms, A.bs, scale)
 end
 
+"""
+    evalpiecewise2Dlinearfunc(x_inp::T,
+        xs::Vector{T}, ys::Vector{T}, ms::Vector{T}, bs::Vector{T}, scale::T)::T where T
+
+Evaluates a piece-wise linear function.
+
+# Select arguments
+Two-element 1-D array for the following. The first entry relates to the a parameter, and the second relates to the b parameter.
+- `x_inp::T`: input argument to function.
+- `xs::Vector{T}`: x-coordinates for the line endpoints. Length L + 1.
+- `ys::Vector{T}`: y-coordinates for the line endpoints. Length L + 1.
+- `ms::Vector{T}`: slope for the lines. Length L.
+- `bs::Vector{T}`: y-intercepts for the lines. Length L.
+- `scale::T`: Re-scaling parameter to `x` so that it is in [-1,1], before applying the piece-wise linear function on the domain [-1,1].
+
+
+***
+evalpiecewise2Dlinearfunc(x_inp::T,
+    xs::Vector{T}, ys::Vector{T}, ms::Vector{T}, bs::Vector{T})::T where T
+
+In the case when the `scale` argument is absent, it is taken to be 1.
+
+See piece-wise_linear.jl in the /examples folder for an example.
+"""
 function evalpiecewise2Dlinearfunc(x_inp::T,
     xs::Vector{T}, ys::Vector{T}, ms::Vector{T}, bs::Vector{T}, scale::T)::T where T
 
@@ -115,6 +139,30 @@ function evalinversepiecewise2Dlinearfunc(x_inp::T, A::Piecewise2DLineType{T}, s
     return evalinversepiecewise2Dlinearfunc(x, A.xs, A.ys, A.ms, A.bs, scale)
 end
 
+"""
+    evalinversepiecewise2Dlinearfunc(x_inp::T,
+        xs::Vector{T}, ys::Vector{T}, ms::Vector{T}, bs::Vector{T}, scale::T)::T where T
+
+Evaluates the inverse of a (forward) piece-wise linear function, given the parameters of the forward function.
+
+# Select arguments
+Two-element 1-D array for the following. The first entry relates to the a parameter, and the second relates to the b parameter.
+- `x_inp::T`: input argument to function.
+- `xs::Vector{T}`: x-coordinates for the line endpoints of the forward function. Length L + 1.
+- `ys::Vector{T}`: y-coordinates for the line endpoints of the forward function. Length L + 1.
+- `ms::Vector{T}`: slope for the lines of the forward function. Length L.
+- `bs::Vector{T}`: y-intercepts for the lines of the forward function. Length L.
+- `scale::T`: Re-scaling parameter to `x` so that it is in [-1,1], before applying the piece-wise linear inverse function on the domain [-1,1].
+
+
+***
+evalinversepiecewise2Dlinearfunc(x_inp::T,
+    xs::Vector{T}, ys::Vector{T}, ms::Vector{T}, bs::Vector{T})::T where T
+
+In the case when the `scale` argument is absent, it is taken to be 1.
+
+See piece-wise_linear.jl in the /examples folder for an example.
+"""
 function evalinversepiecewise2Dlinearfunc(x_inp::T,
     xs::Vector{T}, ys::Vector{T}, ms::Vector{T}, bs::Vector{T}, scale::T)::T where T
 
@@ -447,18 +495,18 @@ end
 
 #####################
 
-function getendomorphismpiecewiselinear(p_lb::T, p_ub::T, window::T;
+function getendomorphismpiecewiselinear(p_lb::T, p_ub::T, range_percentage::T;
     N_itp_samples::Int = 10,
-    input_range_percentage::T = 0.9) where T
+    domain_percentage::T = 0.9) where T
 
-    #ϵ = window/100
+    # set up.
+    lb = zero(T)
+    ub = one(T)
+    c = domain_percentage*(ub-lb)
+    window = range_percentage*(ub-lb)
 
     #p_range = LinRange(p_lb + window + ϵ, p_ub - window - ϵ, N_itp_samples)
     p_range = LinRange(p_lb + window, p_ub - window, N_itp_samples)
-
-    lb = zero(T)
-    ub = one(T)
-    c = input_range_percentage*(ub-lb)
 
     infos = Vector{Piecewise2DLineType{T}}(undef, length(p_range))
     zs = Vector{Vector{T}}(undef, length(p_range))

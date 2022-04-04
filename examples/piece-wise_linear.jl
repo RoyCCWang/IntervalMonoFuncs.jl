@@ -15,9 +15,9 @@ PyPlot.matplotlib["rcParams"][:update](["font.size" => 22, "font.family" => "ser
 
 Random.seed!(25)
 
-z_st = [-0.82; 0.59] # This is {c_l} in notes.
-z_fin = [0.044; 0.97] # This is {d_l} in notes.
-scale = 2.34
+z_st = [-0.82; 0.59] # This is {c_l} in the documentation.
+z_fin = [0.044; 0.97] # This is {d_l} in the documentation.
+scale = 2.34 # This is s in the documentation.
 
 # amount of input region used to map to the intervals specified by z_st and z_fin.
 input_range_percentage = 0.95
@@ -34,10 +34,10 @@ f_x = f.(x_range)
 finv_y = finv.(f_x)
 
 sanity_check = norm(sort(f_x)-f_x)
-println("f_x: sanity_check = ", sanity_check)
+println("f_x: monotonicity sanity_check = ", sanity_check)
 
 sanity_check = norm(sort(finv_y)-x_range)
-println("finv_y: sanity_check = ", sanity_check)
+println("finv_y: monotonicity sanity_check = ", sanity_check)
 
 PyPlot.figure(fig_num)
 fig_num += 1

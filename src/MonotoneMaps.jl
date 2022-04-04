@@ -15,6 +15,11 @@ include("../src/fit/fit_to_linear.jl")
 
 include("../src/utils.jl")
 
-export convertcompactdomain
+export getpiecewiselines,
+    evalpiecewise2Dlinearfunc,
+    evalinversepiecewise2Dlinearfunc
+
+
+
 
 end

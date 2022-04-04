@@ -1,6 +1,8 @@
 # Piece-wise linear usage example
 
-From two pairs of endpoints, a compression parameter, and scale parameter, we get the piece-wise linear function, its inverse, and a monotonically interpolated smooth surrogate using [NMRDataSetup.jl](https://github.com/JuliaMath/Interpolations.jl).
+From a set of endpoints (```z_st``` and ```z_fin```) in (-1,1), a compression parameter ```c``` in (0,2, and a positive ```scale``` parameter, we get the piece-wise linear function ```h```, its inverse ```hinv```. We also fit a monotonically interpolated smooth surrogate ```h_itp``` using the [Interpolations.jl](https://github.com/JuliaMath/Interpolations.jl) package.
+
+The resultant piece-wise linear function would have $2L+1$ subintervals, where $L$ is the length of `z_st`. This is because the `getpiecewiselines()` function automatically adds an interval to each of the endpoints -1 and 1 of the domain, and automatically creates an interval between each of the specified non-overlapping intervals specified in ```z_st``` and ```z_fin```. In this example, $L=2$.
 
 
 Load required packages and set up random seed.
@@ -13,10 +15,10 @@ import Interpolations
 Random.seed!(25)
 ```
 
-The user-specified parameters with 95% of the domain $[-1,1]$ of the piece-wise linear function we want to map to an interval defined by $\left\{ c_{l},d_{l}\right\}$.
+The user-specified parameters with 95% of the domain $[-1,1]$ of the piece-wise linear function we want to map to an interval in the set of intervals $\left\{ \left(\text{z_st}_{l},\text{z_fin}_{l}\right)\right\} _{l}$.
 ```julia; results="hidden"
-z_st = [-0.82; 0.59] # This is {c_l} in notes.
-z_fin = [0.044; 0.97] # This is {d_l} in notes.
+z_st = [-0.82; 0.59]
+z_fin = [0.044; 0.97]
 scale = 2.34 # This is s in notes.
 
 # amount of input region used to map to the intervals specified by z_st and z_fin.
@@ -26,7 +28,7 @@ input_range_percentage = 0.95
 c = input_range_percentage*2
 ```
 
-Build the piece-wise linear function, and its inverse. The forward function here is really $sf\left(\frac{x}{s}\right)$, where $s$ is the scale variable.
+Build the piece-wise linear function, and its inverse. The forward function `h` is really $sf\left(\frac{x}{s}\right)$, where $s$ is `scale`. If `scale` is not supplied to `getpiecewiselines()`, then it is taken to be 1.
 ```julia; results="hidden"
 xs, ys, ms, bs, len_s, len_z = MonotoneMaps.getpiecewiselines(z_st, z_fin, c)
 h = xx->MonotoneMaps.evalpiecewise2Dlinearfunc(xx, xs, ys, ms, bs, scale)
@@ -39,7 +41,7 @@ Visualize.
 
 x_range = LinRange(-scale, scale, 5000)
 h_x = h.(x_range)
-hinv_y = finv.(h_x)
+hinv_y = hinv.(h_x)
 
 fig = PyPlot.figure()
 PyPlot.plot(x_range, h_x)
@@ -56,3 +58,29 @@ PyPlot.title("inverse function")
 display(fig)
 
 ```
+
+Monotonic interpolation using evaluations of `h` at locations in `X`. The resultant smooth surrogate is `h_itp`.
+```julia; results="hidden"
+
+X = LinRange(-scale, scale, 50) # 50 sampling locations.
+Y = h.(X)
+h_itp = Interpolations.extrapolate(Interpolations.interpolate(X,
+Y, Interpolations.SteffenMonotonicInterpolation()), Interpolations.Flat());
+
+```
+
+```julia; fig_cap="", echo=false
+
+t = LinRange(-scale, scale, 5000)
+h_itp_t = map(h_itp, t)
+
+fig = PyPlot.figure()
+PyPlot.plot(t, h_itp_t)
+PyPlot.xlabel("t")
+PyPlot.ylabel("y")
+PyPlot.title("SteffenMonoton (monotonic) interpolation from Interpolations.jl")
+display(fig)
+
+```
+
+One application of such monotonic maps is to encourage some downstream numerical "uniform" search routine to focus its search on certain intervals. In this scenario, the search routine would see the output of the monotonic map, which would encourage it to reduce searching around the interval $[0,1]$. The construction of the piece-wise linear function in this example is essentially the fitting a transport map for a uniform distribution to a piece-wise constant distribution, and the smooth surrogate makes this transport map differentiable.
