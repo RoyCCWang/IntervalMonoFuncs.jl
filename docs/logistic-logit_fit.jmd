@@ -1,0 +1,136 @@
+# Logistic-logit function parameters for mapping a large subset to a small subset
+
+### Logistic-logit function
+Given a positive number $a$ and a real number $b$, our logistic-logit function is a composition of the logistic and logit functions. It is defined as 
+
+$\begin{align*}
+f\left(x\right) & :\left(0,1\right)\rightarrow\left(0,1\right)\\
+x & \mapsto\frac{1}{1+\exp\left(-a\ln\left(\frac{x}{1-x}-b\right)\right)}.
+\end{align*}$
+
+### Goal & motivation
+Given non-overlapping subintervals in $[-1,1]$, one can fit a piece-wise linear function as described in the [piece-wise linear example](piece-wise_linear.html). The example here offers a manner to devise a family of smoother monotonic functions that is guided by piece-wise linear functions.
+
+In this example, we create piece-wise linear functions that has a single line segment that has a small slope. The interpretation of using such a function as a transport map is to move mass from a large coverage to a concentrated coverage. The intervals in the domain and range that correspond to this segment is the *focus interval*, and is controlled by `range_percentage` and `domain_percentage`. We then fit a logistic-logit function to each of the piece-wise linear functions. The fitted parameters can then be interpolated so that we get a logistic-logit function for any given focus interval.
+
+### Preparation
+To install the required libraries do the following in the Julia REPL:
+```julia; results="hidden"
+import Pkg
+Pkg.add(path="https://github.com/RoyCCWang/MonotoneMaps.jl")
+Pkg.add("PyPlot")
+Pkg.add("Plots")
+```
+
+### Code
+Load required packages and set up random seed.
+```julia; results="hidden"
+import MonotoneMaps
+import PyPlot
+using Plots; pyplot()
+import Random
+using LinearAlgebra
+Random.seed!(25)
+```
+
+Get the set of piece-wise linear functions. The `domain_percentage` parameter specifies how much of the domain is used for the single subinterval in the range to focus on, while the `range_percentage` parameter specifies the absolute amount of the range compression parameter $c$ that was mentioned in the documentation, we use `range_percentage` to control the slope of the single subinterval that we want to focus on. The `p_lb` and `p_ub` variables must be 0 and 1, respectively, because the domain and range of the logistic-probit function are both $(0,1)$. This could change in the future, if other sigmoid-like functions are implemented in this package that operates on a different interval. We construct 10 piece-wise linear functions with the focus subinterval spaced out between `p_lb` and `p_ub`.
+```julia; results="hidden"
+p_lb = 0.0 # this must be 0.
+p_ub = 1.0 # this must be 1.
+range_percentage = 0.1
+N_itp_samples = 10
+domain_percentage = 0.7
+infos, zs, p_range = MonotoneMaps.getendomorphismpiecewiselinear(p_lb, p_ub, range_percentage; N_itp_samples = N_itp_samples, domain_percentage = domain_percentage)
+
+# construct the set of piece-wise functions.
+fs = collect( xx->MonotoneMaps.evalpiecewise2Dlinearfunc(xx, infos[i]) for i = 1:length(infos) )
+
+```
+
+
+
+Visualize the piece-wise functions, and select individual functions so we see the shape of these functions.
+```julia; fig_cap="", echo=false
+
+display_t = LinRange(0.0, 1.0, 5000)
+
+display_mat = [ fs[c](display_t[r]) for r = 1:length(display_t), c = 1:length(fs) ]
+display_labels = ["$(i)-th function" for j = 1:1, i = 1:length(fs)]
+
+default(titlefont = (20, "times"), legendfontsize = 15, guidefont = (18, :black),
+tickfont = (12, :black))
+plot_handle = plot(display_t, display_mat,
+label = display_labels,
+title = "Piece-wise linear functions",
+xlabel = "x",
+ylabel = "y",
+linewidth = 2, legend = :outerright, aspect_ratio=:equal, size = (800,800))
+display(plot_handle)
+
+plot_handle = plot(display_t, fs[5].(display_t),
+title = "5-th Piece-wise linear function",
+xlabel = "x",
+ylabel = "y",
+linewidth = 2, legend = :none, aspect_ratio=:equal, size = (800,800))
+display(plot_handle)
+
+plot_handle = plot(display_t, fs[1].(display_t),
+title = "1-st Piece-wise linear function",
+xlabel = "x",
+ylabel = "y",
+linewidth = 2, legend = :none, aspect_ratio=:equal, size = (800,800))
+display(plot_handle)
+```
+
+Use `getcompactsigmoidparameters()` to fit the parameters $a$ and $b$ of the logistic-logit function to the flat slope regions for each of the piece-wise linear functions.
+
+```julia; results="hidden"
+
+p0 = [0.5; 0.0] # initial guess.
+p_lb = [0.1; -5.0] # optimization lower bounds for parameters a and b.
+p_ub = [0.6; 5.0] # optimization upper bounds for the
+optim_algorithm = :LN_BOBYQA # a local derivative-free algorithm. For other algorithms in NLopt, see https://nlopt.readthedocs.io/en/latest/NLopt_Algorithms/
+
+costfuncs, minxs, rets = MonotoneMaps.getcompactsigmoidparameters(infos; p0 = p0, p_lb = p_lb, p_ub = p_ub, optim_algorithm = optim_algorithm)
+qs = collect( tt->MonotoneMaps.evalcompositelogisticprobit(tt, minxs[i][1], minxs[i][2]) for i = 1:length(minxs) )
+```
+
+Visualize.
+```julia; fig_cap="", echo=false
+display_mat = [ fs[c](display_t[r]) for r = 1:length(display_t), c = 1:length(fs) ]
+display_labels = ["$(i)-th piece-wise linear" for j = 1:1, i = 1:length(fs)]
+
+display_mat2 = [ qs[c](display_t[r]) for r = 1:length(display_t), c = 1:length(fs) ]
+display_labels2 = ["$(i)-th logistic-logit" for j = 1:1, i = 1:length(qs)]
+
+plot_handle2 = plot(display_t, display_mat,
+label = display_labels,
+title = "Fitted logistic-logit functions",
+xlabel = "x",
+ylabel = "y",
+linewidth = 2, legend = :outerright, aspect_ratio=:equal, size = (800,800))
+
+plot!(display_t, display_mat2,
+label = display_labels2,
+style = :dash)
+
+display(plot_handle2)
+```
+
+
+
+The parameters $a$ and $b$ are stored in `minxs`.
+```julia;
+minxs
+```
+
+The approximate center of the focus range interval for each of the functions are stored in `p_range`.
+```julia;
+p_range
+```
+
+For example:
+We see that the $(a,b)$ parameter for the 5-th logistic-logit function is $minxs[5] = `j println("(", minxs[5][1], ",", minxs[5][2], ")")`$. It is a logistic-logit function that maps `domain_percentage` of the domain (x) to `range_percentage` of the range (y) that is roughly centered around $`j p_range[5]`$.
+
+Application:
+One can use the $a$ values in `minxs` as interpolation samples to inputs given in `p_range`, and similarly fit another interpolation function for the $b$ values in `minxs`. One can then obtain $(a,b)$ values for any focus range interval centers that are in `[p_range[1], p_range[end]`. One could apply this type of smooth monotone map to encourage variable exploration in a focused region in numerical optimization routines. This is used in [NMRCalibrate.jl](https://github.com/AI4DBiological-Systems/NMRCalibrate.jl).

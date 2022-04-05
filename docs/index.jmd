@@ -62,4 +62,4 @@ by $s$, e.g. $sf\left(\frac{x}{s}\right)$ is the final output.
 See the [piece-wise linear example](piece-wise_linear.html) for usage and one possible application for this type of monotonic transformation. A non-unity scaling is used in this example.
 
 
-See the [composite sigmoid example](optim.html) for how one can fit smooth sigmoid-like monotonic transforms to a piece-wise linear function that contains only one interval, i.e., $L=1$.
+See the [composite sigmoid example](logistic-logit_fit.html) for how one can fit smooth sigmoid-like monotonic transforms to a piece-wise linear function that contains only one interval, i.e., $L=1$.
