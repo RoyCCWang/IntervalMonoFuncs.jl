@@ -683,18 +683,48 @@ div.title {text-align: center;}
 </span><span class='hljl-n'>range_percentage</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nfB'>0.1</span><span class='hljl-t'>
 </span><span class='hljl-n'>N_itp_samples</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>10</span><span class='hljl-t'>
 </span><span class='hljl-n'>domain_percentage</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nfB'>0.7</span><span class='hljl-t'>
-</span><span class='hljl-n'>infos</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>zs</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>p_range</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>MonotoneMaps</span><span class='hljl-oB'>.</span><span class='hljl-nf'>getendomorphismpiecewiselinear</span><span class='hljl-p'>(</span><span class='hljl-n'>p_lb</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>p_ub</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>range_percentage</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-n'>N_itp_samples</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>N_itp_samples</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>domain_percentage</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>domain_percentage</span><span class='hljl-p'>)</span><span class='hljl-t'>
+</span><span class='hljl-n'>infos</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>zs</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>p_range</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>MonotoneMaps</span><span class='hljl-oB'>.</span><span class='hljl-nf'>getendomorphismpiecewiselinear</span><span class='hljl-p'>(</span><span class='hljl-n'>p_lb</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>p_ub</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>range_percentage</span><span class='hljl-p'>;</span><span class='hljl-t'> </span><span class='hljl-n'>N_itp_samples</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>N_itp_samples</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>domain_percentage</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>domain_percentage</span><span class='hljl-p'>);</span><span class='hljl-t'>
 
 </span><span class='hljl-cs'># construct the set of piece-wise functions.</span><span class='hljl-t'>
-</span><span class='hljl-n'>fs</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>collect</span><span class='hljl-p'>(</span><span class='hljl-t'> </span><span class='hljl-n'>xx</span><span class='hljl-oB'>-&gt;</span><span class='hljl-n'>MonotoneMaps</span><span class='hljl-oB'>.</span><span class='hljl-nf'>evalpiecewise2Dlinearfunc</span><span class='hljl-p'>(</span><span class='hljl-n'>xx</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>infos</span><span class='hljl-p'>[</span><span class='hljl-n'>i</span><span class='hljl-p'>])</span><span class='hljl-t'> </span><span class='hljl-k'>for</span><span class='hljl-t'> </span><span class='hljl-n'>i</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-ni'>1</span><span class='hljl-oB'>:</span><span class='hljl-nf'>length</span><span class='hljl-p'>(</span><span class='hljl-n'>infos</span><span class='hljl-p'>)</span><span class='hljl-t'> </span><span class='hljl-p'>)</span>
+</span><span class='hljl-cs'>#fs = collect( xx-&gt;MonotoneMaps.evalpiecewise2Dlinearfunc(xx, infos[i]) for i = 1:length(infos) );</span><span class='hljl-t'>
+
+</span><span class='hljl-cs'>#x = 1.23</span>
 </pre>
 
+
+<pre class="julia-error">
+ERROR: MethodError: no method matching getendomorphismpiecewiselinear&#40;::Float64, ::Float64, ::Float64; N_itp_samples&#61;10, domain_percentage&#61;0.7&#41;
+Closest candidates are:
+  getendomorphismpiecewiselinear&#40;::T, ::T, ::T; N_itp_samples, input_range_percentage&#41; where T at ~/.julia/packages/MonotoneMaps/50Ohm/src/endomorphisms/piece_wise_linear.jl:450 got unsupported keyword argument &quot;domain_percentage&quot;
+</pre>
+
+
+<p>text1</p>
+
+
+<pre class='hljl'>
+<span class='hljl-n'>f</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-p'>(</span><span class='hljl-n'>x</span><span class='hljl-p'>)</span><span class='hljl-t'> </span><span class='hljl-oB'>-&gt;</span><span class='hljl-t'> </span><span class='hljl-n'>x</span><span class='hljl-oB'>^</span><span class='hljl-ni'>2</span>
+</pre>
+
+
+
+<p>text2</p>
+
+
+<pre class='hljl'>
+<span class='hljl-nf'>f</span><span class='hljl-p'>(</span><span class='hljl-ni'>3</span><span class='hljl-p'>)</span>
+</pre>
+
+
+<pre class="output">
+9
+</pre>
 
 
 <p>Visualize the piece-wise functions.</p>
 
 <pre class="julia-error">
-ERROR: UndefVarError: fs not defined
+ERROR: UndefVarError: infos not defined
 </pre>
 
 
@@ -703,7 +733,7 @@ ERROR: UndefVarError: fs not defined
         <div class="footer">
           <p>
             Published from <a href="optim.jmd">optim.jmd</a>
-            using <a href="http://github.com/JunoLab/Weave.jl">Weave.jl</a> v0.10.10 on 2022-04-04.
+            using <a href="http://github.com/JunoLab/Weave.jl">Weave.jl</a> v0.10.10 on 2022-04-05.
           </p>
         </div>
       </div>

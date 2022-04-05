@@ -1,8 +1,8 @@
-# explore warping functions.
+# In this example, we create piece-wise linear functions that has a single line segment that has a small slope. The interpretation of using such a function as a transport map is to move mass from a large coverage to a concentrated coverage. The intervals in the domain and range that correspond to this segment is the *focus interval*, and is controlled by `range_percentage` and `domain_percentage`. We then fit a logistic-logit function to each of the piece-wise linear functions. The fitted parameters can then be interpolated so that we get a logistic-logit function for any given focus interval.
 
-# include("../src/MonotoneMaps.jl")
-# import .MonotoneMaps
-import MonotoneMaps
+include("../src/MonotoneMaps.jl")
+import .MonotoneMaps
+#import MonotoneMaps
 
 import PyPlot
 import Random
@@ -16,7 +16,7 @@ PyPlot.matplotlib["rcParams"][:update](["font.size" => 22, "font.family" => "ser
 
 Random.seed!(25)
 
-# get the oracle single-region piece-wise linear functions, and visualize.
+# Get the set of piece-wise linear functions.
 p_lb = 0.0
 p_ub = 1.0
 range_percentage = 0.1
@@ -24,8 +24,10 @@ N_itp_samples = 10
 domain_percentage = 0.7
 infos, zs, p_range = MonotoneMaps.getendomorphismpiecewiselinear(p_lb, p_ub, range_percentage; N_itp_samples = N_itp_samples, domain_percentage = domain_percentage)
 
+# construct the set of piece-wise functions.
 fs = collect( xx->MonotoneMaps.evalpiecewise2Dlinearfunc(xx, infos[i]) for i = 1:length(infos) )
 
+# visualize.
 display_t = LinRange(0.0, 1.0, 5000)
 
 PyPlot.figure(fig_num)
