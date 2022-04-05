@@ -679,14 +679,14 @@ Pkg.add&#40;path&#61;&quot;https://github.com/RoyCCWang/MonotoneMaps.jl&quot;&#4
 <p>To update this package once it is installed, just do</p>
 <pre><code>Pkg.update&#40;&quot;MonotoneMaps&quot;&#41;</code></pre>
 <h2>Piece-wise linear function</h2>
-<p>Our definition of the indicator function in this work is </p>
+<p>Our definition of the indicator function in this work is</p>
 <p class="math">\[
 1_{a,b}\left(x\right):=\begin{cases}
 1 & \text{if }x\in\left[a,b\right]\subset\left[-1,1\right],\\
 0 & \text{otherwise.}
 \end{cases}
 \]</p>
-<p>Given a compression parameter <span class="math">$c\in\left(0,2\right)$</span>, non-overlapping intervals in <span class="math">$\left(-1,1\right)\subset\mathbb{R}$</span> as parameterized by the set of endpoints <span class="math">$\left\{ c_{l},d_{l}\right\} $, our piece-wise linear map $\left[-1,1\right]\rightarrow\left[-1,1\right]$</span> is of the form </p>
+<p>Given a compression parameter <span class="math">$c\in\left(0,2\right)$</span>, non-overlapping intervals in <span class="math">$\left(-1,1\right)\subset\mathbb{R}$</span> as parameterized by the set of endpoints <span class="math">$\left\{ c_{l},d_{l}\right\} $, our piece-wise linear map $\left[-1,1\right]\rightarrow\left[-1,1\right]$</span> is of the form</p>
 <p class="math">\[
 f\left(x\right):=\begin{cases}
 \sum_{l}f_{l}\left(x\right) & \text{if }x\in\left[-1,1\right],\\
@@ -694,7 +694,7 @@ f\left(x\right):=\begin{cases}
 -1 & \text{otherwise}.
 \end{cases}
 \]</p>
-<p>The linear function on interval <span class="math">$l$</span> is </p>
+<p>The linear function on interval <span class="math">$l$</span> is</p>
 <p class="math">\[
 f_{l}\left(x\right):=\left(m_{l}x+b_{l}\right)1_{a_{l},b_{l}}\left(x\right).
 \]</p>
@@ -709,14 +709,14 @@ f_{l}\left(x\right):=\left(m_{l}x+b_{l}\right)1_{a_{l},b_{l}}\left(x\right).
 </ul>
 <p>The parameters <span class="math">$\left\{ c_{l},d_{l}\right\}$</span> define the <span class="math">$l$</span>-th interval in the range of <span class="math">$f$</span>, while <span class="math">$\left\{ a_{l},b_{l}\right\}$</span> define the domain. The compression <span class="math">$c$</span> characterizes the slope of the linears in the transform <span class="math">$f$</span>. To generalize the domain and range of this map from <span class="math">$\left[-1,1\right]$</span> to <span class="math">$\left[-s,s\right]$</span>, use <span class="math">$\frac{x}{s}$</span> as the input to the map <span class="math">$f$</span>, and rescale the output by <span class="math">$s$</span>, e.g. <span class="math">$sf\left(\frac{x}{s}\right)$</span> is the final output.</p>
 <p>See the <a href="piece-wise_linear.html">piece-wise linear example</a> for usage and one possible application for this type of monotonic transformation. A non-unity scaling is used in this example.</p>
-<p>See the <a href="optim.html">composite sigmoid example</a> for how one can fit smooth sigmoid-like monotonic transforms to a piece-wise linear function that contains only one interval, i.e., <span class="math">$L=1$</span>.</p>
+<p>See the <a href="logistic-logit_fit.html">logistic-logit example</a> for how one can fit smooth sigmoid-like monotonic transforms to a piece-wise linear function that contains only one interval, i.e., <span class="math">$L=1$</span>.</p>
 
 
         <HR/>
         <div class="footer">
           <p>
             Published from <a href="index.jmd">index.jmd</a>
-            using <a href="http://github.com/JunoLab/Weave.jl">Weave.jl</a> v0.10.10 on 2022-04-04.
+            using <a href="http://github.com/JunoLab/Weave.jl">Weave.jl</a> v0.10.10 on 2022-04-05.
           </p>
         </div>
       </div>

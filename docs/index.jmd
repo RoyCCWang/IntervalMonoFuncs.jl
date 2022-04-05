@@ -21,7 +21,7 @@ Pkg.update("MonotoneMaps")
 ```
 
 ## Piece-wise linear function
-Our definition of the indicator function in this work is 
+Our definition of the indicator function in this work is
 
 $1_{a,b}\left(x\right):=\begin{cases}
 1 & \text{if }x\in\left[a,b\right]\subset\left[-1,1\right],\\
@@ -33,7 +33,7 @@ Given a compression parameter $c\in\left(0,2\right)$, non-overlapping
 intervals in $\left(-1,1\right)\subset\mathbb{R}$ as parameterized
 by the set of endpoints $\left\{ c_{l},d_{l}\right\} $, our piece-wise
 linear map $\left[-1,1\right]\rightarrow\left[-1,1\right]$ is of
-the form 
+the form
 
 $f\left(x\right):=\begin{cases}
 \sum_{l}f_{l}\left(x\right) & \text{if }x\in\left[-1,1\right],\\
@@ -42,7 +42,7 @@ $f\left(x\right):=\begin{cases}
 \end{cases}$
 
 
-The linear function on interval $l$ is 
+The linear function on interval $l$ is
 
 $f_{l}\left(x\right):=\left(m_{l}x+b_{l}\right)1_{a_{l},b_{l}}\left(x\right).$
 
@@ -62,4 +62,4 @@ by $s$, e.g. $sf\left(\frac{x}{s}\right)$ is the final output.
 See the [piece-wise linear example](piece-wise_linear.html) for usage and one possible application for this type of monotonic transformation. A non-unity scaling is used in this example.
 
 
-See the [composite sigmoid example](logistic-logit_fit.html) for how one can fit smooth sigmoid-like monotonic transforms to a piece-wise linear function that contains only one interval, i.e., $L=1$.
+See the [logistic-logit example](logistic-logit_fit.html) for how one can fit smooth sigmoid-like monotonic transforms to a piece-wise linear function that contains only one interval, i.e., $L=1$.
