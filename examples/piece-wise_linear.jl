@@ -15,21 +15,24 @@ PyPlot.matplotlib["rcParams"][:update](["font.size" => 22, "font.family" => "ser
 
 Random.seed!(25)
 
-z_st = [-0.82; 0.59] # This is {c_l} in the documentation.
-z_fin = [0.044; 0.97] # This is {d_l} in the documentation.
-scale = 2.34 # This is s in the documentation.
+z_st = [-0.82; 0.59] # This is {c_l} in the documentation. All elements must be between lb and ub.
+z_fin = [0.044; 0.97] # This is {d_l} in the documentation. All elements must be between lb and ub.
+
+# allowed values for lb, ub, -1 <= lb < ub <= 1
+lb = -1.0
+ub = 1.0
+scale = 2.34
 
 # amount of input region used to map to the intervals specified by z_st and z_fin.
 input_range_percentage = 0.95
 
-#c = input_range_percentage*(ub-lb)*scale, lb = -1, ub = 1
-c = input_range_percentage*2
+c = input_range_percentage*(ub-lb)
 
-xs, ys, ms, bs, len_s, len_z = MonotoneMaps.getpiecewiselines(z_st, z_fin, c)
+xs, ys, ms, bs, len_s, len_z = MonotoneMaps.getpiecewiselines(z_st, z_fin, c; lb = lb, ub = ub)
 f = xx->MonotoneMaps.evalpiecewise2Dlinearfunc(xx, xs, ys, ms, bs, scale)
 finv = xx->MonotoneMaps.evalinversepiecewise2Dlinearfunc(xx, xs, ys, ms, bs, scale)
 
-x_range = LinRange(-scale, scale, 5000)
+x_range = LinRange(lb*scale, ub*scale, 5000)
 f_x = f.(x_range)
 finv_y = finv.(f_x)
 
@@ -64,13 +67,13 @@ PyPlot.title("inverse")
 
 ### use monotonic interpolation.
 
-X = LinRange(-scale, scale, 50)
+X = LinRange(lb*scale, ub*scale, 50)
 Y = f.(X)
 f_itp = Interpolations.extrapolate(Interpolations.interpolate(X,
 Y, Interpolations.SteffenMonotonicInterpolation()), Interpolations.Flat());
 
 
-t = LinRange(-scale, scale, 5000)
+t = LinRange(lb*scale, ub*scale, 5000)
 f_itp_t = map(f_itp, t)
 
 sanity_check = norm(sort(f_itp_t)-f_itp_t)

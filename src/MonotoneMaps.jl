@@ -17,9 +17,10 @@ include("../src/utils.jl")
 
 export getpiecewiselines,
     evalpiecewise2Dlinearfunc,
-    evalinversepiecewise2Dlinearfunc
+    evalinversepiecewise2Dlinearfunc,
 
-
-
+    getendomorphismpiecewiselinear,
+    getcompactsigmoidparameters,
+    evalcompositelogisticprobit
 
 end

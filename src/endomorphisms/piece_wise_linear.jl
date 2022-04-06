@@ -495,15 +495,35 @@ end
 
 #####################
 
+"""
+    getendomorphismpiecewiselinear(p_lb::T, p_ub::T, range_percentage::T;
+        N_itp_samples::Int = 10,
+        domain_percentage::T = 0.9) where T
+
+Get the parameters for a set of `N_itp_samples` piece-wise linear functions that has a focus interval in its range between `p_lb + range_percentage` and `p_ub - range_percentage`.
+
+f = xx->MonotoneMaps.evalpiecewise2Dlinearfunc(xx, xs, ys, ms, bs)*scale
+maps [lb, ub] to [lb, ub]*scale.
+
+# Arguments
+Constraint: -1 <= `p_lb`` < `p_ub`` <= 1
+- `p_lb::T`: lower bound for the domain and range for each function.
+- `p_ub::T`: upper bound for the domain and range for each function.
+- `range_percentage::T`: The percentage of the rain to for the focus interval.
+- `N_itp_samples::Int`: The number of functions to fit, each with a focus interval that uniformly covers `p_lb + range_percentage` and `p_ub - range_percentage`.
+- `domain_percentage::T`: The percentage of the domain to map to the focus interval in the range.
+
+# Example
+See /examples/logistic-logit_fit.jl and https://royccwang.github.io/MonotoneMaps.jl/
+
+"""
 function getendomorphismpiecewiselinear(p_lb::T, p_ub::T, range_percentage::T;
     N_itp_samples::Int = 10,
     domain_percentage::T = 0.9) where T
 
     # set up.
-    lb = zero(T)
-    ub = one(T)
-    c = domain_percentage*(ub-lb)
-    window = range_percentage*(ub-lb)
+    c = domain_percentage*(p_ub-p_lb)
+    window = range_percentage*(p_ub-p_lb)
 
     #p_range = LinRange(p_lb + window + ϵ, p_ub - window - ϵ, N_itp_samples)
     p_range = LinRange(p_lb + window, p_ub - window, N_itp_samples)
