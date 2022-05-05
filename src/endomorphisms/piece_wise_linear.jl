@@ -536,7 +536,7 @@ function getendomorphismpiecewiselinear(p_lb::T, p_ub::T, range_percentage::T;
         z_st = [p - window;]
         z_fin = [p + window;]
 
-        xs, ys, ms, bs, len_s, len_z = getpiecewiselines(z_st, z_fin, c; lb = lb, ub = ub)
+        xs, ys, ms, bs, len_s, len_z = getpiecewiselines(z_st, z_fin, c; lb = p_lb, ub = p_ub)
         infos[i] = Piecewise2DLineType(xs, ys, ms, bs, len_s, len_z)
 
         zs[i] = [z_st[1]; z_fin[1]]

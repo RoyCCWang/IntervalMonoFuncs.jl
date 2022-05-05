@@ -25,7 +25,7 @@ Given a set of single region piece-wise linear function parameter objects, infos
 
 ∀ i ∈ [length(infos)], infos[i].xs must be 4 elements, with the first and last being the boundary, and the second and third being the end points of the single region.
 
-p0, p_lb, p_ub are two element 1-D arrays. The first element relates to
+p0, p_lb, p_ub are two element 1-D arrays.
 ...
 # Select arguments
 Two-element 1-D array for the following. The first entry relates to the a parameter, and the second relates to the b parameter.
@@ -65,7 +65,7 @@ function getcompactsigmoidparameters(infos::Vector{MonotoneMaps.Piecewise2DLineT
         g = pp->evalcostfunc(t_range, fs[l], pp)
         dg = xx->Zygote.gradient(f, xx)
 
-        
+
         opt = NLopt.Opt(optim_algorithm, length(p0))
 
         minf, minx, ret, N_evals = runNLopt!(opt,
