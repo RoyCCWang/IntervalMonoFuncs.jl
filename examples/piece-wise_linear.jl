@@ -1,8 +1,8 @@
 # explore warping functions.
 
-include("../src/MonotoneMaps.jl")
-import .MonotoneMaps
-#import MonotoneMaps
+include("../src/IntervalMonoFuncs.jl")
+import .IntervalMonoFuncs
+#import IntervalMonoFuncs
 import PyPlot
 import Random
 using LinearAlgebra
@@ -19,7 +19,7 @@ z_st = [-0.82; 0.59] # This is {c_l} in the documentation. All elements must be 
 z_fin = [0.044; 0.97] # This is {d_l} in the documentation. All elements must be between lb and ub.
 
 # allowed values for lb, ub, -1 <= lb < ub <= 1
-lb = -1.0
+lb = -0.9
 ub = 1.0
 scale = 2.34
 
@@ -28,9 +28,9 @@ input_range_percentage = 0.95
 
 c = input_range_percentage*(ub-lb)
 
-xs, ys, ms, bs, len_s, len_z = MonotoneMaps.getpiecewiselines(z_st, z_fin, c; lb = lb, ub = ub)
-f = xx->MonotoneMaps.evalpiecewise2Dlinearfunc(xx, xs, ys, ms, bs, scale)
-finv = xx->MonotoneMaps.evalinversepiecewise2Dlinearfunc(xx, xs, ys, ms, bs, scale)
+xs, ys, ms, bs, len_s, len_z = IntervalMonoFuncs.getpiecewiselines(z_st, z_fin, c; lb = lb, ub = ub)
+f = xx->IntervalMonoFuncs.evalpiecewise2Dlinearfunc(xx, xs, ys, ms, bs, scale)
+finv = xx->IntervalMonoFuncs.evalinversepiecewise2Dlinearfunc(xx, xs, ys, ms, bs, scale)
 
 x_range = LinRange(lb*scale, ub*scale, 5000)
 f_x = f.(x_range)
@@ -87,5 +87,5 @@ PyPlot.plot(t, f_itp_t)
 PyPlot.legend()
 PyPlot.xlabel("t")
 PyPlot.ylabel("f_itp")
-PyPlot.title("SteffenMonoton itp")
+PyPlot.title("Steffen Monotonic itp")
 #PyPlot.axis("scaled")

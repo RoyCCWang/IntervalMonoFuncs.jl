@@ -10,10 +10,9 @@ end
 
 function convertcompactdomain(x::Vector{T}, a::T, b::T, c::T, d::T)::Vector{T} where T <: Real
 
-    return collect( convertcompactdomain(x[i], a, b, c, d) for i = 1:length(x) )
+    return collect( convertcompactdomain(x[i], a, b, c, d) for i in eachindex(x) )
 end
 
-#unzip(a) = map(x->getfield.(a, x), fieldnames(eltype(a)))
 
 
 function runNLopt!(  opt,

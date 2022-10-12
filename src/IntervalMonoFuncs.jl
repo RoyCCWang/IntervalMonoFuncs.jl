@@ -1,4 +1,4 @@
-module MonotoneMaps
+module IntervalMonoFuncs
 
 # Write your package code here.
 

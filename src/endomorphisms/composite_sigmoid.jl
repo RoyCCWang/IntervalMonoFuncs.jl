@@ -36,28 +36,28 @@ function evalinversecompositelogisticprobit(y_inp::T, a, b, lb, ub)::T where T <
     return x_out
 end
 
-function eval1Dnumericalinverse(f::Function,
-    y::T,
-    x0::T,
-    a::T,
-    b::T,
-    max_iters::Int) where T <: Real
+# function eval1Dnumericalinverse(f::Function,
+#     y::T,
+#     x0::T,
+#     a::T,
+#     b::T,
+#     max_iters::Int) where T <: Real
 
-    @assert a < b
+#     @assert a < b
 
-    obj_func = xx->((f(xx[1])-y)^2)::T
+#     obj_func = xx->((f(xx[1])-y)^2)::T
 
-    op = Optim.Options( iterations = max_iters,
-                         store_trace = false,
-                         show_trace = false)
+#     op = Optim.Options( iterations = max_iters,
+#                          store_trace = false,
+#                          show_trace = false)
 
-    results = Optim.optimize(   obj_func,
-                                [x0],
-                                Optim.NewtonTrustRegion(),
-                                op)
+#     results = Optim.optimize(   obj_func,
+#                                 [x0],
+#                                 Optim.NewtonTrustRegion(),
+#                                 op)
 
-    x_star = results.minimizer
-    x_out = clamp(x_star[1], a, b)
+#     x_star = results.minimizer
+#     x_out = clamp(x_star[1], a, b)
 
-    return x_out, results
-end
+#     return x_out, results
+# end

@@ -1,7 +1,7 @@
 # explore warping functions.
 
-include("../src/MonotoneMaps.jl")
-import .MonotoneMaps
+include("../src/IntervalMonoFuncs.jl")
+import .IntervalMonoFuncs
 
 using FFTW
 import PyPlot
@@ -20,10 +20,9 @@ PyPlot.matplotlib["rcParams"][:update](["font.size" => 22, "font.family" => "ser
 Random.seed!(25)
 
 ## gives a random map.
-D = 1 #2 # number of regions.
-lb = 0.0
+lb = -1.0
 ub = 1.0
-scale = 1.0 #0.5
+scale = 1.0
 
 # amount of input region used to map to z_lens.
 input_range_percentage = 0.9
@@ -31,30 +30,13 @@ c = input_range_percentage*(ub-lb)
 
 # generate random boundary points that define the regions.
 
-# # for lb = -1.0
-# z_st = [ -0.12; ]
-# z_fin = [ 0.76; ]
+# for lb = -1.0
+z_st = [ -0.12; ]
+z_fin = [ 0.76; ]
 
-# for lb = 0.0
-# z_st = [ 0.12; ]
-# z_fin = [ 0.76; ]
-
-# z_st = [ 0.1; ]
-# z_fin = [ 0.3; ]
-#
-#
-# z_st = [ 0.6; ]
-# z_fin = [ 0.8; ]
-
-# z_st = [ -0.999999999999; ]
-# z_fin = [ -0.9; ]
-#
-# z_st = [ 0.9; ]
-# z_fin = [ 0.999; ]
-
-xs, ys, ms, bs, len_s, len_z = MonotoneMaps.getpiecewiselines(z_st, z_fin, c; lb = lb, ub = ub)
-f = xx->MonotoneMaps.evalpiecewise2Dlinearfunc(xx, xs, ys, ms, bs)*scale
-finv = xx->MonotoneMaps.evalinversepiecewise2Dlinearfunc(xx/scale, xs, ys, ms, bs)
+xs, ys, ms, bs, len_s, len_z = IntervalMonoFuncs.getpiecewiselines(z_st, z_fin, c; lb = lb, ub = ub)
+f = xx->IntervalMonoFuncs.evalpiecewise2Dlinearfunc(xx, xs, ys, ms, bs)*scale
+finv = xx->IntervalMonoFuncs.evalinversepiecewise2Dlinearfunc(xx/scale, xs, ys, ms, bs)
 
 x_range = LinRange(lb, ub, 5000)
 f_x = f.(x_range)

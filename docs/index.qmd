@@ -9,37 +9,41 @@ This library provides:
 
 ## Getting Started
 Add (currently) unregistered public Julia package for dependency before installing NMRSpectraSimulator.jl
-```
+``` julia
 import Pkg
-Pkg.add(path="https://github.com/RoyCCWang/MonotoneMaps.jl")
+Pkg.add(path="https://github.com/RoyCCWang/IntervalMonoFuncs.jl")
 
 ```
 
 To update this package once it is installed, just do
-```
-Pkg.update("MonotoneMaps")
+``` julia
+Pkg.update("IntervalMonoFuncs")
 ```
 
 ## Piece-wise linear function
 Our definition of the indicator function in this work is
 
-$1_{a,b}\left(x\right):=\begin{cases}
+$$
+1_{a,b}\left(x\right):=\begin{cases}
 1 & \text{if }x\in\left[a,b\right]\subset\left[-1,1\right],\\
 0 & \text{otherwise.}
-\end{cases}$
+\end{cases}
+$$
 
 
 Given a compression parameter $c\in\left(0,2\right)$, non-overlapping
 intervals in $\left(-1,1\right)\subset\mathbb{R}$ as parameterized
-by the set of endpoints $\left\{ c_{l},d_{l}\right\} $, our piece-wise
+by the set of endpoints $\left\{ c_{l},d_{l}\right\}$, our piece-wise
 linear map $\left[-1,1\right]\rightarrow\left[-1,1\right]$ is of
 the form
 
-$f\left(x\right):=\begin{cases}
+$$
+f\left(x\right):=\begin{cases}
 \sum_{l}f_{l}\left(x\right) & \text{if }x\in\left[-1,1\right],\\
 1 & \text{if }x>s,\\
 -1 & \text{otherwise}.
-\end{cases}$
+\end{cases}
+$$
 
 
 The linear function on interval $l$ is
@@ -48,9 +52,9 @@ $f_{l}\left(x\right):=\left(m_{l}x+b_{l}\right)1_{a_{l},b_{l}}\left(x\right).$
 
 
 The choice of $\left\{ m_{l},b_{l}\right\}$ is such that:
-*  $f$ is continuous.
-*  $\sum_{l}\left(b_{l}-a_{l}\right)=c$.
-*  $m_{l}=\frac{d_{l}-c_{l}}{b_{l}-a_{l}}$.
+-- $f$ is continuous.
+-- $\sum_{l}\left(b_{l}-a_{l}\right)=c$.
+-- $m_{l}=\frac{d_{l}-c_{l}}{b_{l}-a_{l}}$.
 
 The parameters $\left\{ c_{l},d_{l}\right\}$ define the $l$-th interval in the range of $f$, while $\left\{ a_{l},b_{l}\right\}$ define the domain. The compression $c$ characterizes the slope of
 the linears in the transform $f$. To generalize the domain and range

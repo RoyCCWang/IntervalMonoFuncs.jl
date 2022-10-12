@@ -1,727 +1,259 @@
 <!DOCTYPE html>
-<HTML lang = "en">
-<HEAD>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  
-  
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
-  <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
-      TeX: { equationNumbers: { autoNumber: "AMS" } }
-    });
-  </script>
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.251">
 
-  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-  </script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-  
+
+<title>index</title>
 <style>
-pre.hljl {
-    border: 1px solid #ccc;
-    margin: 5px;
-    padding: 5px;
-    overflow-x: auto;
-    color: rgb(68,68,68); background-color: rgb(251,251,251); }
-pre.hljl > span.hljl-t { }
-pre.hljl > span.hljl-w { }
-pre.hljl > span.hljl-e { }
-pre.hljl > span.hljl-eB { }
-pre.hljl > span.hljl-o { }
-pre.hljl > span.hljl-k { color: rgb(148,91,176); font-weight: bold; }
-pre.hljl > span.hljl-kc { color: rgb(59,151,46); font-style: italic; }
-pre.hljl > span.hljl-kd { color: rgb(214,102,97); font-style: italic; }
-pre.hljl > span.hljl-kn { color: rgb(148,91,176); font-weight: bold; }
-pre.hljl > span.hljl-kp { color: rgb(148,91,176); font-weight: bold; }
-pre.hljl > span.hljl-kr { color: rgb(148,91,176); font-weight: bold; }
-pre.hljl > span.hljl-kt { color: rgb(148,91,176); font-weight: bold; }
-pre.hljl > span.hljl-n { }
-pre.hljl > span.hljl-na { }
-pre.hljl > span.hljl-nb { }
-pre.hljl > span.hljl-nbp { }
-pre.hljl > span.hljl-nc { }
-pre.hljl > span.hljl-ncB { }
-pre.hljl > span.hljl-nd { color: rgb(214,102,97); }
-pre.hljl > span.hljl-ne { }
-pre.hljl > span.hljl-neB { }
-pre.hljl > span.hljl-nf { color: rgb(66,102,213); }
-pre.hljl > span.hljl-nfm { color: rgb(66,102,213); }
-pre.hljl > span.hljl-np { }
-pre.hljl > span.hljl-nl { }
-pre.hljl > span.hljl-nn { }
-pre.hljl > span.hljl-no { }
-pre.hljl > span.hljl-nt { }
-pre.hljl > span.hljl-nv { }
-pre.hljl > span.hljl-nvc { }
-pre.hljl > span.hljl-nvg { }
-pre.hljl > span.hljl-nvi { }
-pre.hljl > span.hljl-nvm { }
-pre.hljl > span.hljl-l { }
-pre.hljl > span.hljl-ld { color: rgb(148,91,176); font-style: italic; }
-pre.hljl > span.hljl-s { color: rgb(201,61,57); }
-pre.hljl > span.hljl-sa { color: rgb(201,61,57); }
-pre.hljl > span.hljl-sb { color: rgb(201,61,57); }
-pre.hljl > span.hljl-sc { color: rgb(201,61,57); }
-pre.hljl > span.hljl-sd { color: rgb(201,61,57); }
-pre.hljl > span.hljl-sdB { color: rgb(201,61,57); }
-pre.hljl > span.hljl-sdC { color: rgb(201,61,57); }
-pre.hljl > span.hljl-se { color: rgb(59,151,46); }
-pre.hljl > span.hljl-sh { color: rgb(201,61,57); }
-pre.hljl > span.hljl-si { }
-pre.hljl > span.hljl-so { color: rgb(201,61,57); }
-pre.hljl > span.hljl-sr { color: rgb(201,61,57); }
-pre.hljl > span.hljl-ss { color: rgb(201,61,57); }
-pre.hljl > span.hljl-ssB { color: rgb(201,61,57); }
-pre.hljl > span.hljl-nB { color: rgb(59,151,46); }
-pre.hljl > span.hljl-nbB { color: rgb(59,151,46); }
-pre.hljl > span.hljl-nfB { color: rgb(59,151,46); }
-pre.hljl > span.hljl-nh { color: rgb(59,151,46); }
-pre.hljl > span.hljl-ni { color: rgb(59,151,46); }
-pre.hljl > span.hljl-nil { color: rgb(59,151,46); }
-pre.hljl > span.hljl-noB { color: rgb(59,151,46); }
-pre.hljl > span.hljl-oB { color: rgb(102,102,102); font-weight: bold; }
-pre.hljl > span.hljl-ow { color: rgb(102,102,102); font-weight: bold; }
-pre.hljl > span.hljl-p { }
-pre.hljl > span.hljl-c { color: rgb(153,153,119); font-style: italic; }
-pre.hljl > span.hljl-ch { color: rgb(153,153,119); font-style: italic; }
-pre.hljl > span.hljl-cm { color: rgb(153,153,119); font-style: italic; }
-pre.hljl > span.hljl-cp { color: rgb(153,153,119); font-style: italic; }
-pre.hljl > span.hljl-cpB { color: rgb(153,153,119); font-style: italic; }
-pre.hljl > span.hljl-cs { color: rgb(153,153,119); font-style: italic; }
-pre.hljl > span.hljl-csB { color: rgb(153,153,119); font-style: italic; }
-pre.hljl > span.hljl-g { }
-pre.hljl > span.hljl-gd { }
-pre.hljl > span.hljl-ge { }
-pre.hljl > span.hljl-geB { }
-pre.hljl > span.hljl-gh { }
-pre.hljl > span.hljl-gi { }
-pre.hljl > span.hljl-go { }
-pre.hljl > span.hljl-gp { }
-pre.hljl > span.hljl-gs { }
-pre.hljl > span.hljl-gsB { }
-pre.hljl > span.hljl-gt { }
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 
+<script src="index_files/libs/clipboard/clipboard.min.js"></script>
+<script src="index_files/libs/quarto-html/quarto.js"></script>
+<script src="index_files/libs/quarto-html/popper.min.js"></script>
+<script src="index_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="index_files/libs/quarto-html/anchor.min.js"></script>
+<link href="index_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="index_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="index_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="index_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="index_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 
-  <style type="text/css">
-  @font-face {
-  font-style: normal;
-  font-weight: 300;
-}
-@font-face {
-  font-style: normal;
-  font-weight: 400;
-}
-@font-face {
-  font-style: normal;
-  font-weight: 600;
-}
-html {
-  font-family: sans-serif; /* 1 */
-  -ms-text-size-adjust: 100%; /* 2 */
-  -webkit-text-size-adjust: 100%; /* 2 */
-}
-body {
-  margin: 0;
-}
-article,
-aside,
-details,
-figcaption,
-figure,
-footer,
-header,
-hgroup,
-main,
-menu,
-nav,
-section,
-summary {
-  display: block;
-}
-audio,
-canvas,
-progress,
-video {
-  display: inline-block; /* 1 */
-  vertical-align: baseline; /* 2 */
-}
-audio:not([controls]) {
-  display: none;
-  height: 0;
-}
-[hidden],
-template {
-  display: none;
-}
-a:active,
-a:hover {
-  outline: 0;
-}
-abbr[title] {
-  border-bottom: 1px dotted;
-}
-b,
-strong {
-  font-weight: bold;
-}
-dfn {
-  font-style: italic;
-}
-h1 {
-  font-size: 2em;
-  margin: 0.67em 0;
-}
-mark {
-  background: #ff0;
-  color: #000;
-}
-small {
-  font-size: 80%;
-}
-sub,
-sup {
-  font-size: 75%;
-  line-height: 0;
-  position: relative;
-  vertical-align: baseline;
-}
-sup {
-  top: -0.5em;
-}
-sub {
-  bottom: -0.25em;
-}
-img {
-  border: 0;
-}
-svg:not(:root) {
-  overflow: hidden;
-}
-figure {
-  margin: 1em 40px;
-}
-hr {
-  -moz-box-sizing: content-box;
-  box-sizing: content-box;
-  height: 0;
-}
-pre {
-  overflow: auto;
-}
-code,
-kbd,
-pre,
-samp {
-  font-family: monospace, monospace;
-  font-size: 1em;
-}
-button,
-input,
-optgroup,
-select,
-textarea {
-  color: inherit; /* 1 */
-  font: inherit; /* 2 */
-  margin: 0; /* 3 */
-}
-button {
-  overflow: visible;
-}
-button,
-select {
-  text-transform: none;
-}
-button,
-html input[type="button"], /* 1 */
-input[type="reset"],
-input[type="submit"] {
-  -webkit-appearance: button; /* 2 */
-  cursor: pointer; /* 3 */
-}
-button[disabled],
-html input[disabled] {
-  cursor: default;
-}
-button::-moz-focus-inner,
-input::-moz-focus-inner {
-  border: 0;
-  padding: 0;
-}
-input {
-  line-height: normal;
-}
-input[type="checkbox"],
-input[type="radio"] {
-  box-sizing: border-box; /* 1 */
-  padding: 0; /* 2 */
-}
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
-  height: auto;
-}
-input[type="search"] {
-  -webkit-appearance: textfield; /* 1 */
-  -moz-box-sizing: content-box;
-  -webkit-box-sizing: content-box; /* 2 */
-  box-sizing: content-box;
-}
-input[type="search"]::-webkit-search-cancel-button,
-input[type="search"]::-webkit-search-decoration {
-  -webkit-appearance: none;
-}
-fieldset {
-  border: 1px solid #c0c0c0;
-  margin: 0 2px;
-  padding: 0.35em 0.625em 0.75em;
-}
-legend {
-  border: 0; /* 1 */
-  padding: 0; /* 2 */
-}
-textarea {
-  overflow: auto;
-}
-optgroup {
-  font-weight: bold;
-}
-table {
-  font-family: monospace, monospace;
-  font-size : 0.8em;
-  border-collapse: collapse;
-  border-spacing: 0;
-}
-td,
-th {
-  padding: 0;
-}
-thead th {
-    border-bottom: 1px solid black;
-    background-color: white;
-}
-tr:nth-child(odd){
-  background-color: rgb(248,248,248);
-}
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
 
 
-/*
-* Skeleton V2.0.4
-* Copyright 2014, Dave Gamache
-* www.getskeleton.com
-* Free to use under the MIT license.
-* http://www.opensource.org/licenses/mit-license.php
-* 12/29/2014
-*/
-.container {
-  position: relative;
-  width: 100%;
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 0 20px;
-  box-sizing: border-box; }
-.column,
-.columns {
-  width: 100%;
-  float: left;
-  box-sizing: border-box; }
-@media (min-width: 400px) {
-  .container {
-    width: 85%;
-    padding: 0; }
-}
-@media (min-width: 550px) {
-  .container {
-    width: 80%; }
-  .column,
-  .columns {
-    margin-left: 4%; }
-  .column:first-child,
-  .columns:first-child {
-    margin-left: 0; }
 
-  .one.column,
-  .one.columns                    { width: 4.66666666667%; }
-  .two.columns                    { width: 13.3333333333%; }
-  .three.columns                  { width: 22%;            }
-  .four.columns                   { width: 30.6666666667%; }
-  .five.columns                   { width: 39.3333333333%; }
-  .six.columns                    { width: 48%;            }
-  .seven.columns                  { width: 56.6666666667%; }
-  .eight.columns                  { width: 65.3333333333%; }
-  .nine.columns                   { width: 74.0%;          }
-  .ten.columns                    { width: 82.6666666667%; }
-  .eleven.columns                 { width: 91.3333333333%; }
-  .twelve.columns                 { width: 100%; margin-left: 0; }
-
-  .one-third.column               { width: 30.6666666667%; }
-  .two-thirds.column              { width: 65.3333333333%; }
-
-  .one-half.column                { width: 48%; }
-
-  /* Offsets */
-  .offset-by-one.column,
-  .offset-by-one.columns          { margin-left: 8.66666666667%; }
-  .offset-by-two.column,
-  .offset-by-two.columns          { margin-left: 17.3333333333%; }
-  .offset-by-three.column,
-  .offset-by-three.columns        { margin-left: 26%;            }
-  .offset-by-four.column,
-  .offset-by-four.columns         { margin-left: 34.6666666667%; }
-  .offset-by-five.column,
-  .offset-by-five.columns         { margin-left: 43.3333333333%; }
-  .offset-by-six.column,
-  .offset-by-six.columns          { margin-left: 52%;            }
-  .offset-by-seven.column,
-  .offset-by-seven.columns        { margin-left: 60.6666666667%; }
-  .offset-by-eight.column,
-  .offset-by-eight.columns        { margin-left: 69.3333333333%; }
-  .offset-by-nine.column,
-  .offset-by-nine.columns         { margin-left: 78.0%;          }
-  .offset-by-ten.column,
-  .offset-by-ten.columns          { margin-left: 86.6666666667%; }
-  .offset-by-eleven.column,
-  .offset-by-eleven.columns       { margin-left: 95.3333333333%; }
-
-  .offset-by-one-third.column,
-  .offset-by-one-third.columns    { margin-left: 34.6666666667%; }
-  .offset-by-two-thirds.column,
-  .offset-by-two-thirds.columns   { margin-left: 69.3333333333%; }
-
-  .offset-by-one-half.column,
-  .offset-by-one-half.columns     { margin-left: 52%; }
-
-}
-html {
-  font-size: 62.5%; }
-body {
-  font-size: 1.5em; /* currently ems cause chrome bug misinterpreting rems on body element */
-  line-height: 1.6;
-  font-weight: 400;
-  font-family: "Raleway", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  color: #222; }
-h1, h2, h3, h4, h5, h6 {
-  margin-top: 0;
-  margin-bottom: 2rem;
-  font-weight: 300; }
-h1 { font-size: 3.6rem; line-height: 1.2;  letter-spacing: -.1rem;}
-h2 { font-size: 3.4rem; line-height: 1.25; letter-spacing: -.1rem; }
-h3 { font-size: 3.2rem; line-height: 1.3;  letter-spacing: -.1rem; }
-h4 { font-size: 2.8rem; line-height: 1.35; letter-spacing: -.08rem; }
-h5 { font-size: 2.4rem; line-height: 1.5;  letter-spacing: -.05rem; }
-h6 { font-size: 1.5rem; line-height: 1.6;  letter-spacing: 0; }
-
-p {
-  margin-top: 0; }
-a {
-  color: #1EAEDB; }
-a:hover {
-  color: #0FA0CE; }
-.button,
-button,
-input[type="submit"],
-input[type="reset"],
-input[type="button"] {
-  display: inline-block;
-  height: 38px;
-  padding: 0 30px;
-  color: #555;
-  text-align: center;
-  font-size: 11px;
-  font-weight: 600;
-  line-height: 38px;
-  letter-spacing: .1rem;
-  text-transform: uppercase;
-  text-decoration: none;
-  white-space: nowrap;
-  background-color: transparent;
-  border-radius: 4px;
-  border: 1px solid #bbb;
-  cursor: pointer;
-  box-sizing: border-box; }
-.button:hover,
-button:hover,
-input[type="submit"]:hover,
-input[type="reset"]:hover,
-input[type="button"]:hover,
-.button:focus,
-button:focus,
-input[type="submit"]:focus,
-input[type="reset"]:focus,
-input[type="button"]:focus {
-  color: #333;
-  border-color: #888;
-  outline: 0; }
-.button.button-primary,
-button.button-primary,
-input[type="submit"].button-primary,
-input[type="reset"].button-primary,
-input[type="button"].button-primary {
-  color: #FFF;
-  background-color: #33C3F0;
-  border-color: #33C3F0; }
-.button.button-primary:hover,
-button.button-primary:hover,
-input[type="submit"].button-primary:hover,
-input[type="reset"].button-primary:hover,
-input[type="button"].button-primary:hover,
-.button.button-primary:focus,
-button.button-primary:focus,
-input[type="submit"].button-primary:focus,
-input[type="reset"].button-primary:focus,
-input[type="button"].button-primary:focus {
-  color: #FFF;
-  background-color: #1EAEDB;
-  border-color: #1EAEDB; }
-input[type="email"],
-input[type="number"],
-input[type="search"],
-input[type="text"],
-input[type="tel"],
-input[type="url"],
-input[type="password"],
-textarea,
-select {
-  height: 38px;
-  padding: 6px 10px; /* The 6px vertically centers text on FF, ignored by Webkit */
-  background-color: #fff;
-  border: 1px solid #D1D1D1;
-  border-radius: 4px;
-  box-shadow: none;
-  box-sizing: border-box; }
-/* Removes awkward default styles on some inputs for iOS */
-input[type="email"],
-input[type="number"],
-input[type="search"],
-input[type="text"],
-input[type="tel"],
-input[type="url"],
-input[type="password"],
-textarea {
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none; }
-textarea {
-  min-height: 65px;
-  padding-top: 6px;
-  padding-bottom: 6px; }
-input[type="email"]:focus,
-input[type="number"]:focus,
-input[type="search"]:focus,
-input[type="text"]:focus,
-input[type="tel"]:focus,
-input[type="url"]:focus,
-input[type="password"]:focus,
-textarea:focus,
-select:focus {
-  border: 1px solid #33C3F0;
-  outline: 0; }
-label,
-legend {
-  display: block;
-  margin-bottom: .5rem;
-  font-weight: 600; }
-fieldset {
-  padding: 0;
-  border-width: 0; }
-input[type="checkbox"],
-input[type="radio"] {
-  display: inline; }
-label > .label-body {
-  display: inline-block;
-  margin-left: .5rem;
-  font-weight: normal; }
-ul {
-  list-style: circle; }
-ol {
-  list-style: decimal; }
-ul ul,
-ul ol,
-ol ol,
-ol ul {
-  margin: 1.5rem 0 1.5rem 3rem;
-  font-size: 90%; }
-li > p {margin : 0;}
-th,
-td {
-  padding: 12px 15px;
-  text-align: left;
-  border-bottom: 1px solid #E1E1E1; }
-th:first-child,
-td:first-child {
-  padding-left: 0; }
-th:last-child,
-td:last-child {
-  padding-right: 0; }
-button,
-.button {
-  margin-bottom: 1rem; }
-input,
-textarea,
-select,
-fieldset {
-  margin-bottom: 1.5rem; }
-pre,
-blockquote,
-dl,
-figure,
-table,
-p,
-ul,
-ol,
-form {
-  margin-bottom: 1.0rem; }
-.u-full-width {
-  width: 100%;
-  box-sizing: border-box; }
-.u-max-full-width {
-  max-width: 100%;
-  box-sizing: border-box; }
-.u-pull-right {
-  float: right; }
-.u-pull-left {
-  float: left; }
-hr {
-  margin-top: 3rem;
-  margin-bottom: 3.5rem;
-  border-width: 0;
-  border-top: 1px solid #E1E1E1; }
-.container:after,
-.row:after,
-.u-cf {
-  content: "";
-  display: table;
-  clear: both; }
-
-pre {
-  display: block;
-  padding: 9.5px;
-  margin: 0 0 10px;
-  font-size: 13px;
-  line-height: 1.42857143;
-  word-break: break-all;
-  word-wrap: break-word;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-pre.hljl {
-  margin: 0 0 10px;
-  display: block;
-  background: #f5f5f5;
-  border-radius: 4px;
-  padding : 5px;
-}
-
-pre.output {
-  background: #ffffff;
-}
-
-pre.code {
-  background: #ffffff;
-}
-
-pre.julia-error {
-  color : red
-}
-
-code,
-kbd,
-pre,
-samp {
-  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
-  font-size: 0.9em;
-}
-
-
-@media (min-width: 400px) {}
-@media (min-width: 550px) {}
-@media (min-width: 750px) {}
-@media (min-width: 1000px) {}
-@media (min-width: 1200px) {}
-
-h1.title {margin-top : 20px}
-img {max-width : 100%}
-div.title {text-align: center;}
-
-  </style>
-</HEAD>
-
-<BODY>
-  <div class ="container">
-    <div class = "row">
-      <div class = "col-md-12 twelve columns">
-        <div class="title">
-          
-          
-          
-        </div>
-
-        <h1>Library description</h1>
-<p>This library provides:</p>
-<ol>
-<li><p>a collection of parametric monotonic functions from finite intervals on <span class="math">$\mathbb{R}$</span> to itself &#40;an endomorphism&#41;.</p>
-</li>
-<li><p>Given endpoints of non-overlapping intervals, return a piece-wise linear map and a smooth approximation to it that transports the uniform distribution to a piece-wise constant distribution. The application for this is in optimization. See example here.</p>
-</li>
-</ol>
-<h2>Future</h2>
+<section id="library-description" class="level1">
+<h1>Library description</h1>
+<p>This library provides: 1. a collection of parametric monotonic functions from finite intervals on <span class="math inline">\(\mathbb{R}\)</span> to itself (an endomorphism). 2. Given endpoints of non-overlapping intervals, return a piece-wise linear map and a smooth approximation to it that transports the uniform distribution to a piece-wise constant distribution. The application for this is in optimization. See example here.</p>
+<section id="future" class="level2">
+<h2 class="anchored" data-anchor-id="future">Future</h2>
 <ul>
-<li><p>Transformations of more general domains/range that are isomorphic to <span class="math">$\mathbb{R}$</span> might be added in the future.</p>
-</li>
+<li>Transformations of more general domains/range that are isomorphic to <span class="math inline">\(\mathbb{R}\)</span> might be added in the future.</li>
 </ul>
-<h2>Getting Started</h2>
-<p>Add &#40;currently&#41; unregistered public Julia package for dependency before installing NMRSpectraSimulator.jl</p>
-<pre><code>import Pkg
-Pkg.add&#40;path&#61;&quot;https://github.com/RoyCCWang/MonotoneMaps.jl&quot;&#41;
-</code></pre>
+</section>
+<section id="getting-started" class="level2">
+<h2 class="anchored" data-anchor-id="getting-started">Getting Started</h2>
+<p>Add (currently) unregistered public Julia package for dependency before installing NMRSpectraSimulator.jl</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="bu">Pkg</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">Pkg</span>.<span class="fu">add</span>(path<span class="op">=</span><span class="st">"https://github.com/RoyCCWang/IntervalMonoFuncs.jl"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>To update this package once it is installed, just do</p>
-<pre><code>Pkg.update&#40;&quot;MonotoneMaps&quot;&#41;</code></pre>
-<h2>Piece-wise linear function</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">Pkg</span>.<span class="fu">update</span>(<span class="st">"IntervalMonoFuncs"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="piece-wise-linear-function" class="level2">
+<h2 class="anchored" data-anchor-id="piece-wise-linear-function">Piece-wise linear function</h2>
 <p>Our definition of the indicator function in this work is</p>
-<p class="math">\[
+<p><span class="math display">\[
 1_{a,b}\left(x\right):=\begin{cases}
-1 & \text{if }x\in\left[a,b\right]\subset\left[-1,1\right],\\
-0 & \text{otherwise.}
+1 &amp; \text{if }x\in\left[a,b\right]\subset\left[-1,1\right],\\
+0 &amp; \text{otherwise.}
 \end{cases}
-\]</p>
-<p>Given a compression parameter <span class="math">$c\in\left(0,2\right)$</span>, non-overlapping intervals in <span class="math">$\left(-1,1\right)\subset\mathbb{R}$</span> as parameterized by the set of endpoints <span class="math">$\left\{ c_{l},d_{l}\right\} $, our piece-wise linear map $\left[-1,1\right]\rightarrow\left[-1,1\right]$</span> is of the form</p>
-<p class="math">\[
+\]</span></p>
+<p>Given a compression parameter <span class="math inline">\(c\in\left(0,2\right)\)</span>, non-overlapping intervals in <span class="math inline">\(\left(-1,1\right)\subset\mathbb{R}\)</span> as parameterized by the set of endpoints <span class="math inline">\(\left\{ c_{l},d_{l}\right\}\)</span>, our piece-wise linear map <span class="math inline">\(\left[-1,1\right]\rightarrow\left[-1,1\right]\)</span> is of the form</p>
+<p><span class="math display">\[
 f\left(x\right):=\begin{cases}
-\sum_{l}f_{l}\left(x\right) & \text{if }x\in\left[-1,1\right],\\
-1 & \text{if }x>s,\\
--1 & \text{otherwise}.
+\sum_{l}f_{l}\left(x\right) &amp; \text{if }x\in\left[-1,1\right],\\
+1 &amp; \text{if }x&gt;s,\\
+-1 &amp; \text{otherwise}.
 \end{cases}
-\]</p>
-<p>The linear function on interval <span class="math">$l$</span> is</p>
-<p class="math">\[
-f_{l}\left(x\right):=\left(m_{l}x+b_{l}\right)1_{a_{l},b_{l}}\left(x\right).
-\]</p>
-<p>The choice of <span class="math">$\left\{ m_{l},b_{l}\right\}$</span> is such that:</p>
-<ul>
-<li><p><span class="math">$f$</span> is continuous.</p>
-</li>
-<li><p><span class="math">$\sum_{l}\left(b_{l}-a_{l}\right)=c$</span>.</p>
-</li>
-<li><p><span class="math">$m_{l}=\frac{d_{l}-c_{l}}{b_{l}-a_{l}}$</span>.</p>
-</li>
-</ul>
-<p>The parameters <span class="math">$\left\{ c_{l},d_{l}\right\}$</span> define the <span class="math">$l$</span>-th interval in the range of <span class="math">$f$</span>, while <span class="math">$\left\{ a_{l},b_{l}\right\}$</span> define the domain. The compression <span class="math">$c$</span> characterizes the slope of the linears in the transform <span class="math">$f$</span>. To generalize the domain and range of this map from <span class="math">$\left[-1,1\right]$</span> to <span class="math">$\left[-s,s\right]$</span>, use <span class="math">$\frac{x}{s}$</span> as the input to the map <span class="math">$f$</span>, and rescale the output by <span class="math">$s$</span>, e.g. <span class="math">$sf\left(\frac{x}{s}\right)$</span> is the final output.</p>
+\]</span></p>
+<p>The linear function on interval <span class="math inline">\(l\)</span> is</p>
+<p><span class="math inline">\(f_{l}\left(x\right):=\left(m_{l}x+b_{l}\right)1_{a_{l},b_{l}}\left(x\right).\)</span></p>
+<p>The choice of <span class="math inline">\(\left\{ m_{l},b_{l}\right\}\)</span> is such that: – <span class="math inline">\(f\)</span> is continuous. – <span class="math inline">\(\sum_{l}\left(b_{l}-a_{l}\right)=c\)</span>. – <span class="math inline">\(m_{l}=\frac{d_{l}-c_{l}}{b_{l}-a_{l}}\)</span>.</p>
+<p>The parameters <span class="math inline">\(\left\{ c_{l},d_{l}\right\}\)</span> define the <span class="math inline">\(l\)</span>-th interval in the range of <span class="math inline">\(f\)</span>, while <span class="math inline">\(\left\{ a_{l},b_{l}\right\}\)</span> define the domain. The compression <span class="math inline">\(c\)</span> characterizes the slope of the linears in the transform <span class="math inline">\(f\)</span>. To generalize the domain and range of this map from <span class="math inline">\(\left[-1,1\right]\)</span> to <span class="math inline">\(\left[-s,s\right]\)</span>, use <span class="math inline">\(\frac{x}{s}\)</span> as the input to the map <span class="math inline">\(f\)</span>, and rescale the output by <span class="math inline">\(s\)</span>, e.g.&nbsp;<span class="math inline">\(sf\left(\frac{x}{s}\right)\)</span> is the final output.</p>
 <p>See the <a href="piece-wise_linear.html">piece-wise linear example</a> for usage and one possible application for this type of monotonic transformation. A non-unity scaling is used in this example.</p>
-<p>See the <a href="logistic-logit_fit.html">logistic-logit example</a> for how one can fit smooth sigmoid-like monotonic transforms to a piece-wise linear function that contains only one interval, i.e., <span class="math">$L=1$</span>.</p>
+<p>See the <a href="logistic-logit_fit.html">logistic-logit example</a> for how one can fit smooth sigmoid-like monotonic transforms to a piece-wise linear function that contains only one interval, i.e., <span class="math inline">\(L=1\)</span>.</p>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
 
 
-        <HR/>
-        <div class="footer">
-          <p>
-            Published from <a href="index.jmd">index.jmd</a>
-            using <a href="http://github.com/JunoLab/Weave.jl">Weave.jl</a> v0.10.10 on 2022-04-05.
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</BODY>
 
-</HTML>
+</body></html>

@@ -7,7 +7,7 @@ The resultant piece-wise linear function would have $2L+1$ subintervals, where $
 
 Load required packages and set up random seed.
 ```julia; results="hidden"
-import MonotoneMaps
+import IntervalMonoFuncs
 import PyPlot
 import Random
 using LinearAlgebra
@@ -35,9 +35,9 @@ c = input_range_percentage*(ub-lb)
 
 Build the piece-wise linear function, and its inverse. The forward function `h` is really $sf\left(\frac{x}{s}\right)$, where $s$ is `scale`. If `scale` is not supplied to `getpiecewiselines()`, then it is taken to be 1.
 ```julia; results="hidden"
-xs, ys, ms, bs, len_s, len_z = MonotoneMaps.getpiecewiselines(z_st, z_fin, c; lb = lb, ub = ub)
-h = xx->MonotoneMaps.evalpiecewise2Dlinearfunc(xx, xs, ys, ms, bs, scale)
-hinv = xx->MonotoneMaps.evalinversepiecewise2Dlinearfunc(xx, xs, ys, ms, bs, scale)
+xs, ys, ms, bs, len_s, len_z = IntervalMonoFuncs.getpiecewiselines(z_st, z_fin, c; lb = lb, ub = ub)
+h = xx->IntervalMonoFuncs.evalpiecewise2Dlinearfunc(xx, xs, ys, ms, bs, scale)
+hinv = xx->IntervalMonoFuncs.evalinversepiecewise2Dlinearfunc(xx, xs, ys, ms, bs, scale)
 
 ```
 

@@ -11,7 +11,7 @@ function evalcompositelogisticprobitcost(t_range, f::Function, p::Vector{T})::T 
 end
 
 """
-    getcompactsigmoidparameters(infos::Vector{MonotoneMaps.Piecewise2DLineType{T}};
+    getcompactsigmoidparameters(infos::Vector{IntervalMonoFuncs.Piecewise2DLineType{T}};
         N_fit_positions::Int = 15,
         max_iters = 5000,
         xtol_rel = 1e-5,
@@ -32,14 +32,14 @@ Two-element 1-D array for the following. The first entry relates to the a parame
 - `p0::Vector{T}`: initial guess to the optimization.
 - `p_lb::Vector{T}`: lower bounds to the optimization.
 - `p_ub::Vector{T}`: upper bounds to the optimization.
-- `optim_algorithm::Symbol` can be :GN_ESCH, :GN_ISRES, :LN_BOBYQA, :GN_DIRECT_L
+- `optim_algorithm::Symbol` can be :GN_ESCH, :GN_ISRES, :LN_BOBYQA, :GN_DIRECT_L. Must be a derivative-free NLopt optimization method. See the NLopt library website for more details about these algorithms.
 
 ...
 
 
 See optim.jl in the examples folder for usage details.
 """
-function getcompactsigmoidparameters(infos::Vector{MonotoneMaps.Piecewise2DLineType{T}};
+function getcompactsigmoidparameters(infos::Vector{IntervalMonoFuncs.Piecewise2DLineType{T}};
     N_fit_positions::Int = 15,
     max_iters = 5000,
     xtol_rel = 1e-5,
@@ -51,7 +51,9 @@ function getcompactsigmoidparameters(infos::Vector{MonotoneMaps.Piecewise2DLineT
     p_ub = [0.6; 5.0],
     evalcostfunc = evalcompositelogisticprobitcost) where T
 
-    fs = collect( xx->evalpiecewise2Dlinearfunc(xx, infos[i]) for i = 1:length(infos) )
+    
+
+    fs = collect( xx->evalpiecewise2Dlinearfunc(xx, infos[i]) for i in eachindex(infos) )
 
     L = length(fs)
     gs = Vector{Function}(undef, L)
@@ -63,7 +65,8 @@ function getcompactsigmoidparameters(infos::Vector{MonotoneMaps.Piecewise2DLineT
         t_range = LinRange(infos[l].xs[2], infos[l].xs[3], N_fit_positions)
 
         g = pp->evalcostfunc(t_range, fs[l], pp)
-        dg = xx->Zygote.gradient(f, xx)
+        #dg = xx->Zygote.gradient(f, xx)
+        dg = xx->xx # we're not using gradient-based optimization.
 
 
         opt = NLopt.Opt(optim_algorithm, length(p0))

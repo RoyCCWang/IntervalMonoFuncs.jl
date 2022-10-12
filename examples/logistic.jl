@@ -24,8 +24,8 @@ b = [1.0; 1.0; 1.0] .*1
 c = [1.0; 1.0; 1.0] # higher makes sharper transition.
 d = [0.0; 0.0; 0.0]
 
-fs = collect( xx->( evalf2(evalf1(xx, a[i], b[i]), c[i], c[i]) ) for i = 1:length(a) )
-#fs = collect( xx->( evalf1(0.5*evalf2(xx, a[i], b[i])+0.5, c[i], c[i]) ) for i = 1:length(a) )
+fs = collect( xx->( evalf2(evalf1(xx, a[i], b[i]), c[i], c[i]) ) for i in eachindex(a) )
+#fs = collect( xx->( evalf1(0.5*evalf2(xx, a[i], b[i])+0.5, c[i], c[i]) ) for i in eachindex(a) )
 
 function evalf1(x::T, a, b)::T where T
     return a*log(x/(1-x))+b
@@ -47,7 +47,7 @@ x = LinRange(0 + 1e-2, 1 - 1e-2, 500)
 PyPlot.figure(fig_num)
 fig_num += 1
 
-for i = 1:length(fs)
+for i in eachindex(fs)
     PyPlot.plot(x, fs[i].(x), label = "f[$(i)]")
 end
 
@@ -59,11 +59,11 @@ PyPlot.title("target warp func")
 
 ##### streamline evalf2 ∘ evalf1.
 
-include("../src/MonotoneMaps.jl")
-import .MonotoneMaps
+include("../src/IntervalMonoFuncs.jl")
+import .IntervalMonoFuncs
 
 
-q = tt->MonotoneMaps.evalcompositelogisticprobit(tt, 0.25, 0.83, -1.0, 1.0)
+q = tt->IntervalMonoFuncs.evalcompositelogisticprobit(tt, 0.25, 0.83, -1.0, 1.0)
 
 
 x = LinRange(-1 + 1e-2, 1 - 1e-2, 500)
@@ -84,7 +84,7 @@ PyPlot.title("evalcompositelogisticprobit()")
 
 ## inverse.
 
-q_inv = yy->MonotoneMaps.evalinversecompositelogisticprobit(yy, 0.25, 0.83, -1.0, 1.0)
+q_inv = yy->IntervalMonoFuncs.evalinversecompositelogisticprobit(yy, 0.25, 0.83, -1.0, 1.0)
 
 
 x = LinRange(-1 + 1e-2, 1 - 1e-2, 500)
@@ -101,4 +101,6 @@ PyPlot.xlabel("x")
 PyPlot.ylabel("q")
 PyPlot.title("evalinversecompositelogisticprobit()")
 
-q_inv(q(-0.94)) # check.
+# check.
+@show q_inv(q(-0.94)) 
+@assert isapprox(q_inv(q(-0.94)), -0.94)

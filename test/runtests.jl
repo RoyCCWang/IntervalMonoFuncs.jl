@@ -1,6 +1,6 @@
-using MonotoneMaps
+using IntervalMonoFuncs
 using Test
 
-@testset "MonotoneMaps.jl" begin
+@testset "IntervalMonoFuncs.jl" begin
     # Write your tests here.
 end

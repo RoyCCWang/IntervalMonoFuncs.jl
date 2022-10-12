@@ -3,10 +3,12 @@
 ### Logistic-logit function
 Given a positive number $a$ and a real number $b$, our logistic-logit function is a composition of the logistic and logit functions. It is defined as 
 
-$\begin{align*}
+$$
+\begin{align*}
 f\left(x\right) & :\left(0,1\right)\rightarrow\left(0,1\right)\\
 x & \mapsto\frac{1}{1+\exp\left(-a\ln\left(\frac{x}{1-x}-b\right)\right)}.
-\end{align*}$
+\end{align*}
+$$
 
 ### Goal & motivation
 Given non-overlapping subintervals in $[-1,1]$, one can fit a piece-wise linear function as described in the [piece-wise linear example](piece-wise_linear.html). The example here offers a manner to devise a family of smoother monotonic functions that is guided by piece-wise linear functions.
@@ -15,7 +17,7 @@ In this example, we create piece-wise linear functions that has a single line se
 
 ### Preparation
 To install the required libraries do the following in the Julia REPL:
-```julia; results="hidden"
+```julia
 import Pkg
 Pkg.add(path="https://github.com/RoyCCWang/IntervalMonoFuncs.jl")
 Pkg.add("PyPlot")
@@ -24,7 +26,7 @@ Pkg.add("Plots")
 
 ### Code
 Load required packages and set up random seed.
-```julia; results="hidden"
+```{julia}
 import IntervalMonoFuncs
 import PyPlot
 using Plots; pyplot()
@@ -34,9 +36,9 @@ Random.seed!(25)
 ```
 
 Get the set of piece-wise linear functions. The `domain_percentage` parameter specifies how much of the domain is used for the single subinterval in the range to focus on, while the `range_percentage` parameter specifies the absolute amount of the range compression parameter $c$ that was mentioned in the documentation, we use `range_percentage` to control the slope of the single subinterval that we want to focus on. The `p_lb` and `p_ub` variables must be 0 and 1, respectively, because the domain and range of the logistic-probit function are both $(0,1)$. This could change in the future, if other sigmoid-like functions are implemented in this package that operates on a different interval. We construct 10 piece-wise linear functions with the focus subinterval spaced out between `p_lb` and `p_ub`.
-```julia; results="hidden"
-p_lb = 0.0 # this must be 0.
-p_ub = 1.0 # this must be 1.
+```{julia}
+p_lb = 0.0 # logistic-logit maps [0,1]->[0,1], so we use 0 and 1 for our bounds.
+p_ub = 1.0
 range_percentage = 0.1
 N_itp_samples = 10
 domain_percentage = 0.7
