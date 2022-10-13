@@ -1,8 +1,8 @@
 # Piece-wise linear usage example
 
-From a set of endpoints (```z_st``` and ```z_fin```) in (-1,1), a compression parameter ```c``` in (0,2, and a positive ```scale``` parameter, we get the piece-wise linear function ```h```, its inverse ```hinv```. We also fit a monotonically interpolated smooth surrogate ```h_itp``` using the [Interpolations.jl](https://github.com/JuliaMath/Interpolations.jl) package.
+From a set of endpoints (```intervals_y_st``` and ```intervals_y_fin```) in (-1,1), a compression parameter ```c``` in (0,2, and a positive ```scale``` parameter, we get the piece-wise linear function ```h```, its inverse ```hinv```. We also fit a monotonically interpolated smooth surrogate ```h_itp``` using the [Interpolations.jl](https://github.com/JuliaMath/Interpolations.jl) package.
 
-The resultant piece-wise linear function would have $2L+1$ subintervals, where $L$ is the length of `z_st`. This is because the `getpiecewiselines()` function automatically adds an interval to each of the endpoints -1 and 1 of the domain, and automatically creates an interval between each of the specified non-overlapping intervals specified in ```z_st``` and ```z_fin```. In this example, $L=2$.
+The resultant piece-wise linear function would have $2L+1$ subintervals, where $L$ is the length of `intervals_y_st`. This is because the `getpiecewiselines()` function automatically adds an interval to each of the endpoints -1 and 1 of the domain, and automatically creates an interval between each of the specified non-overlapping intervals specified in ```intervals_y_st``` and ```intervals_y_fin```. In this example, $L=2$.
 
 
 Load required packages and set up random seed.
@@ -15,27 +15,25 @@ import Interpolations
 Random.seed!(25)
 ```
 
-The user-specified parameters with 95% of the domain $[-1,1]$ of the piece-wise linear function we want to map to an interval in the set of intervals $\left\{ \left(\text{z_st}_{l},\text{z_fin}_{l}\right)\right\} _{l}$.
+The user-specified parameters with 95% of the domain $[-1,1]$ of the piece-wise linear function we want to map to an interval in the set of intervals $\left\{ \left(\text{intervals_y_st}_{l},\text{intervals_y_fin}_{l}\right)\right\} _{l}$.
 ```julia; results="hidden"
-z_st = [-0.82; 0.59] # This is {c_l} in the documentation. All elements must be between lb and ub.
-z_fin = [0.044; 0.97] # This is {d_l} in the documentation. All elements must be between lb and ub.
+intervals_y_st = [-0.82; 0.59] # This is {c_l} in the documentation. All elements must be between lb and ub.
+intervals_y_fin = [0.044; 0.97] # This is {d_l} in the documentation. All elements must be between lb and ub.
 
 # allowed values for lb, ub, -1 <= lb < ub <= 1
 lb = -1.0
 ub = 1.0
 scale = 2.34
 
-# amount of input region used to map to the intervals specified by z_st and z_fin.
-input_range_percentage = 0.95
+# amount of input region used to map to the intervals specified by intervals_y_st and intervals_y_fin.
+domain_proportion = 0.95
 
-#c = input_range_percentage*(ub-lb)*scale, lb = -1, ub = 1
-c = input_range_percentage*(ub-lb)
 
 ```
 
 Build the piece-wise linear function, and its inverse. The forward function `h` is really $sf\left(\frac{x}{s}\right)$, where $s$ is `scale`. If `scale` is not supplied to `getpiecewiselines()`, then it is taken to be 1.
 ```julia; results="hidden"
-xs, ys, ms, bs, len_s, len_z = IntervalMonoFuncs.getpiecewiselines(z_st, z_fin, c; lb = lb, ub = ub)
+xs, ys, ms, bs, len_s, len_z, scale = IntervalMonoFuncs.getpiecewiselines(intervals_y_st, intervals_y_fin, domain_proportion; lb = lb, ub = ub)
 h = xx->IntervalMonoFuncs.evalpiecewise2Dlinearfunc(xx, xs, ys, ms, bs, scale)
 hinv = xx->IntervalMonoFuncs.evalinversepiecewise2Dlinearfunc(xx, xs, ys, ms, bs, scale)
 
@@ -44,7 +42,7 @@ hinv = xx->IntervalMonoFuncs.evalinversepiecewise2Dlinearfunc(xx, xs, ys, ms, bs
 Visualize.
 ```julia; fig_cap="", echo=false
 
-x_range = LinRange(lb*scale, ub*scale, 5000)
+x_range = LinRange(-bound, bound, 5000)
 h_x = h.(x_range)
 hinv_y = hinv.(h_x)
 
@@ -67,7 +65,7 @@ display(fig)
 Monotonic interpolation using evaluations of `h` at locations in `X`. The resultant smooth surrogate is `h_itp`.
 ```julia; results="hidden"
 
-X = LinRange(lb*scale, ub*scale, 50) # 50 sampling locations.
+X = LinRange(-bound, bound, 50) # 50 sampling locations.
 Y = h.(X)
 h_itp = Interpolations.extrapolate(Interpolations.interpolate(X,
 Y, Interpolations.SteffenMonotonicInterpolation()), Interpolations.Flat());
@@ -76,7 +74,7 @@ Y, Interpolations.SteffenMonotonicInterpolation()), Interpolations.Flat());
 
 ```julia; fig_cap="", echo=false
 
-t = LinRange(lb*scale, ub*scale, 5000)
+t = LinRange(-bound, bound, 5000)
 h_itp_t = map(h_itp, t)
 
 fig = PyPlot.figure()

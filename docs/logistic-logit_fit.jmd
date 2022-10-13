@@ -11,7 +11,7 @@ x & \mapsto\frac{1}{1+\exp\left(-a\ln\left(\frac{x}{1-x}-b\right)\right)}.
 ### Goal & motivation
 Given non-overlapping subintervals in $[-1,1]$, one can fit a piece-wise linear function as described in the [piece-wise linear example](piece-wise_linear.html). The example here offers a manner to devise a family of smoother monotonic functions that is guided by piece-wise linear functions.
 
-In this example, we create piece-wise linear functions that has a single line segment that has a small slope. The interpretation of using such a function as a transport map is to move mass from a large coverage to a concentrated coverage. The intervals in the domain and range that correspond to this segment is the *focus interval*, and is controlled by `range_percentage` and `domain_percentage`. We then fit a logistic-logit function to each of the piece-wise linear functions. The fitted parameters can then be interpolated so that we get a logistic-logit function for any given focus interval.
+In this example, we create piece-wise linear functions that has a single line segment that has a small slope. The interpretation of using such a function as a transport map is to move mass from a large coverage to a concentrated coverage. The intervals in the domain and range that correspond to this segment is the *focus interval*, and is controlled by `range_proportion` and `domain_proportion`. We then fit a logistic-logit function to each of the piece-wise linear functions. The fitted parameters can then be interpolated so that we get a logistic-logit function for any given focus interval.
 
 ### Preparation
 To install the required libraries do the following in the Julia REPL:
@@ -33,14 +33,14 @@ using LinearAlgebra
 Random.seed!(25)
 ```
 
-Get the set of piece-wise linear functions. The `domain_percentage` parameter specifies how much of the domain is used for the single subinterval in the range to focus on, while the `range_percentage` parameter specifies the absolute amount of the range compression parameter $c$ that was mentioned in the documentation, we use `range_percentage` to control the slope of the single subinterval that we want to focus on. The `p_lb` and `p_ub` variables must be 0 and 1, respectively, because the domain and range of the logistic-probit function are both $(0,1)$. This could change in the future, if other sigmoid-like functions are implemented in this package that operates on a different interval. We construct 10 piece-wise linear functions with the focus subinterval spaced out between `p_lb` and `p_ub`.
+Get the set of piece-wise linear functions. The `domain_proportion` parameter specifies how much of the domain is used for the single subinterval in the range to focus on, while the `range_proportion` parameter specifies the absolute amount of the range compression parameter $c$ that was mentioned in the documentation, we use `range_proportion` to control the slope of the single subinterval that we want to focus on. The `p_lb` and `p_ub` variables must be 0 and 1, respectively, because the domain and range of the logistic-probit function are both $(0,1)$. This could change in the future, if other sigmoid-like functions are implemented in this package that operates on a different interval. We construct 10 piece-wise linear functions with the focus subinterval spaced out between `p_lb` and `p_ub`.
 ```julia; results="hidden"
 p_lb = 0.0 # this must be 0.
 p_ub = 1.0 # this must be 1.
-range_percentage = 0.1
+range_proportion = 0.1
 N_itp_samples = 10
-domain_percentage = 0.7
-infos, zs, p_range = IntervalMonoFuncs.getendomorphismpiecewiselinear(p_lb, p_ub, range_percentage; N_itp_samples = N_itp_samples, domain_percentage = domain_percentage)
+domain_proportion = 0.7
+infos, zs, p_range = IntervalMonoFuncs.getendomorphismpiecewiselinear(p_lb, p_ub, range_proportion; N_itp_samples = N_itp_samples, domain_proportion = domain_proportion)
 
 # construct the set of piece-wise functions.
 fs = collect( xx->IntervalMonoFuncs.evalpiecewise2Dlinearfunc(xx, infos[i]) for i in eachindex(infos) )
@@ -130,7 +130,7 @@ p_range
 ```
 
 For example:
-We see that the $(a,b)$ parameter for the 5-th logistic-logit function is $minxs[5] = `j println("(", minxs[5][1], ",", minxs[5][2], ")")`$. It is a logistic-logit function that maps `domain_percentage` of the domain (x) to `range_percentage` of the range (y) that is roughly centered around $`j p_range[5]`$.
+We see that the $(a,b)$ parameter for the 5-th logistic-logit function is $minxs[5] = `j println("(", minxs[5][1], ",", minxs[5][2], ")")`$. It is a logistic-logit function that maps `domain_proportion` of the domain (x) to `range_proportion` of the range (y) that is roughly centered around $`j p_range[5]`$.
 
 Application:
 One can use the $a$ values in `minxs` as interpolation samples to inputs given in `p_range`, and similarly fit another interpolation function for the $b$ values in `minxs`. One can then obtain $(a,b)$ values for any focus range interval centers that are in `[p_range[1], p_range[end]`. One could apply this type of smooth monotone map to encourage variable exploration in a focused region in numerical optimization routines. This is used in [NMRCalibrate.jl](https://github.com/AI4DBiological-Systems/NMRCalibrate.jl).

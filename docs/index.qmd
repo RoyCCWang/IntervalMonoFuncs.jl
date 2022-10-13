@@ -52,9 +52,10 @@ $f_{l}\left(x\right):=\left(m_{l}x+b_{l}\right)1_{a_{l},b_{l}}\left(x\right).$
 
 
 The choice of $\left\{ m_{l},b_{l}\right\}$ is such that:
--- $f$ is continuous.
--- $\sum_{l}\left(b_{l}-a_{l}\right)=c$.
--- $m_{l}=\frac{d_{l}-c_{l}}{b_{l}-a_{l}}$.
+
+* $f$ is continuous.
+* $\sum_{l}\left(b_{l}-a_{l}\right)=c$.
+* $m_{l}=\frac{d_{l}-c_{l}}{b_{l}-a_{l}}$.
 
 The parameters $\left\{ c_{l},d_{l}\right\}$ define the $l$-th interval in the range of $f$, while $\left\{ a_{l},b_{l}\right\}$ define the domain. The compression $c$ characterizes the slope of
 the linears in the transform $f$. To generalize the domain and range
