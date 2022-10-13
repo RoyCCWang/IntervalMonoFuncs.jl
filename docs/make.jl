@@ -11,5 +11,5 @@ makedocs(
 )
 
 deploydocs(
-    repo = ""
+    repo = "github.com/RoyCCWang/IntervalMonoFuncs.jl.git"
 )
