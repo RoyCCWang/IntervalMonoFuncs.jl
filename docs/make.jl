@@ -5,6 +5,11 @@ import .IntervalMonoFuncs
 
 #import ParametricMonotoneFunctions
 
-makedocs(sitename="ParametricMonotoneFunctions.jl")
+makedocs(
+    sitename="ParametricMonotoneFunctions.jl",
+    format = Documenter.HTML()
+)
 
-
+deploydocs(
+    repo = ""
+)

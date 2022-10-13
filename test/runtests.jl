@@ -1,7 +1,7 @@
 
-include("../src/IntervalMonoFuncs.jl")
-import .IntervalMonoFuncs
-#import IntervalMonoFuncs
+# include("../src/IntervalMonoFuncs.jl")
+# import .IntervalMonoFuncs
+using IntervalMonoFuncs
 
 using LinearAlgebra
 using Test
