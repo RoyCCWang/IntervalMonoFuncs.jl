@@ -16,7 +16,7 @@ All example scripts are in the `/examples` folder. There are:
 See the [documentation page](https://royccwang.github.io/IntervalMonoFuncs.jl/) for more information and walk-through of the two example scripts mentioned above.
 
 
-getendomorphismpiecewiselinear
+createendopiewiselines1
 getcompactsigmoidparameters
 
 evalinversecompositelogisticprobit

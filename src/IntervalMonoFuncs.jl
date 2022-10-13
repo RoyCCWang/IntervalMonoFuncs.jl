@@ -19,7 +19,7 @@ export getpiecewiselines,
     evalpiecewise2Dlinearfunc,
     evalinversepiecewise2Dlinearfunc,
 
-    getendomorphismpiecewiselinear,
+    createendopiewiselines1,
     getcompactsigmoidparameters,
     evalcompositelogisticprobit
 

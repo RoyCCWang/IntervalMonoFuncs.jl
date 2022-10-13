@@ -89,3 +89,34 @@ function getcompactsigmoidparameters(infos::Vector{IntervalMonoFuncs.Piecewise2D
 
     return gs, p_star_set, rets
 end
+
+
+function getlogisticprobitparameters(infos::Vector{IntervalMonoFuncs.Piecewise2DLineType{T}};
+    N_fit_positions::Int = 15,
+    max_iters = 5000,
+    xtol_rel = 1e-5,
+    ftol_rel = 1e-5,
+    maxtime = Inf,
+    optim_algorithm::Symbol = :GN_ESCH,
+    a_lb::T = 0.1,
+    a_ub::T = 0.6,
+    b_lb::T = -5.0,
+    b_ub::T = 5.0,
+    a_initial = (a_ub-a_lb)/2,
+    b_initial = (b_ub-b_lb)/2) where T <: Real
+
+    @assert a_lb <= a_initial <= a_ub
+    @assert b_lb <= b_initial <= b_ub
+
+    return getcompactsigmoidparameters(infos,
+        N_fit_positions = N_fit_positions,
+        max_iters = max_iters,
+        xtol_rel = xtol_rel,
+        ftol_rel = ftol_rel,
+        maxtime = maxtime,
+        optim_algorithm = optim_algorithm,
+        p0 = [a_initial; b_initial],
+        p_lb = [a_lb; b_lb],
+        p_ub = [a_ub; b_ub],
+        evalcostfunc = evalcompositelogisticprobitcost)
+end

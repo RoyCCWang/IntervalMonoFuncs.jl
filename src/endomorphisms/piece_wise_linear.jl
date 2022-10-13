@@ -323,7 +323,7 @@ end
 #####################
 
 """
-infos, zs, p_range = getendomorphismpiecewiselinear(p_lb::T,
+infos, zs, p_range = createendopiewiselines1(p_lb::T,
         p_ub::T,
         range_proportion::T;
         N_itp_samples::Int = 10,
@@ -333,7 +333,7 @@ Get the parameters for a set of `N_itp_samples` piece-wise linear functions that
 
 To evaluate the piecewise linear function via an anonymous function:
 
-
+Constraints: -one(T) <= p_lb < p_ub <= one(T). Hence, the `1` in the name `createendopiewiselines1`.
 
 # Arguments
 Constraint: `p_lb`` < `p_ub``
@@ -358,7 +358,7 @@ for a given `scale` and `m` index would construct the function `f` that evaluate
 See /examples/logistic-logit_fit.jl and https://royccwang.github.io/IntervalMonoFuncs.jl/
 
 """
-function getendomorphismpiecewiselinear(p_lb::T,
+function createendopiewiselines1(p_lb::T,
     p_ub::T,
     range_proportion::T;
     N_itp_samples::Int = 10,

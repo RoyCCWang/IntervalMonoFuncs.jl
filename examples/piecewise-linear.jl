@@ -25,7 +25,7 @@ println("total proportion of range used by the focus intervals is ", sum(interva
 
 IntervalMonoFuncs.checkzstfin(intervals_y_st, intervals_y_fin)
 
-# allowed values for lb, ub, -1 <= lb < ub <= 1
+#
 lb = -2.0
 ub = 1.0
 
@@ -33,7 +33,7 @@ ub = 1.0
 domain_proportion = 0.9
 println("total proportion of domain used by the focus intervals is ", domain_proportion*(ub-lb))
 
-
+# the returned scale is 1.0 if -1 <= lb < ub <= 1 by design of getpiecewiselines(). Otherwise it returns lb_normalized, ub_normalized, scale = IntervalMonoFuncs.normalizebounds(lb, ub).
 xs, ys, ms, bs, len_s, len_z, scale = IntervalMonoFuncs.getpiecewiselines(intervals_y_st, intervals_y_fin, domain_proportion; lb = lb, ub = ub)
 info = IntervalMonoFuncs.Piecewise2DLineType(xs, ys, ms, bs, len_s, len_z)
 

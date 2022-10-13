@@ -13,59 +13,79 @@ Random.seed!(25)
 include("./helpers.jl")
 
 
+
+
 @testset "piecewise-linear" begin
-    # Write your tests here.
 
-    ZERO_TOL = 1e-10
-    N_eval_pts = 5000
-    N_trials = 100
-    N_intervals = 4
-    use_lb_as_start = true # special case involving boundary.
+    runpiecewiselineartests(;
+        val_type = Float64,
+        N_eval_pts = 5000,
+        N_trials = 100,
+        N_intervals = 40,
+        use_lb_as_start = true, # special case involving boundary.
+        ZERO_TOL = 1e-10)
 
-    for n = 1:N_trials
-
-        # case parameters.
-        tmp = randn(2) .* 50
-        lb = minimum(tmp)
-        ub = maximum(tmp)
-
-        domain_proportion = rand()
-
-        intervals_y_st, intervals_y_fin = generatestartfinishpts(N_intervals, lb, ub)
+    runpiecewiselineartests(;
+        val_type = Float64,
+        N_eval_pts = 5000,
+        N_trials = 100,
+        N_intervals = 5,
+        use_lb_as_start = true, # special case involving boundary.
+        ZERO_TOL = 1e-10)
         
-        if use_lb_as_start
-            intervals_y_st[1] = lb
-        end
+    runpiecewiselineartests(;
+        val_type = Float64,
+        N_eval_pts = 5000,
+        N_trials = 100,
+        N_intervals = 40,
+        use_lb_as_start = false,
+        ZERO_TOL = 1e-10)
 
-        # get piece-wise linear function.
-        xs, ys, ms, bs, len_s, len_z, scale = IntervalMonoFuncs.getpiecewiselines(intervals_y_st, intervals_y_fin, domain_proportion; lb = lb, ub = ub)
-        info = IntervalMonoFuncs.Piecewise2DLineType(xs, ys, ms, bs, len_s, len_z)
-        
-        f = xx->IntervalMonoFuncs.evalpiecewise2Dlinearfunc(xx, xs, ys, ms, bs, scale)
-        finv = xx->IntervalMonoFuncs.evalinversepiecewise2Dlinearfunc(xx, xs, ys, ms, bs, scale)
+    runpiecewiselineartests(;
+        N_eval_pts = 5000,
+        N_trials = 100,
+        N_intervals = 5,
+        use_lb_as_start = false,
+        ZERO_TOL = 1e-10)
+end
 
-        
-        x_range = LinRange(lb, ub, N_eval_pts)
-        f_x = f.(x_range)
-        finv_y = finv.(f_x)
+@testset "logistic-probit" begin
 
-        # check for monotonicity of forward evaluations.
-        @test norm(sort(f_x)-f_x) < ZERO_TOL
+    # test different combination of feasible intervals for a and b. See /examples/logistic.jl for motivation.
+    runlogistictests(;
+        val_type = Float64,
+        N_trials = 10000,
+        a_bounds = [0.5, 0.6],
+        b_bounds = [-5.0, 5.0],
+        N_eval_pts = 5000,
+        ZERO_TOL = 1e-10)
 
-        # check inverse.
-        @test norm(sort(finv_y)-x_range) < ZERO_TOL
+    runlogistictests(;
+        val_type = Float64,
+        N_trials = 10000,
+        a_bounds = [-2.0, 2.0],
+        b_bounds = [-2.0, 2.0],
+        N_eval_pts = 5000,
+        ZERO_TOL = 1e-10)
 
-        # check domain and range coverage.
-        start_pts, fin_pts, boundary_pts = IntervalMonoFuncs.getboundarypts(intervals_y_st, intervals_y_fin, lb, ub, info, scale)
+    runlogistictests(;
+        val_type = Float64,
+        N_trials = 10000,
+        a_bounds = [0.01, 1.0],
+        b_bounds = [-5.0, 5.0],
+        N_eval_pts = 5000,
+        ZERO_TOL = 1e-10)
+end
 
-        boundary_xs = collect(boundary_pts[i][1] for i in eachindex(boundary_pts) )
-        boundary_ys = collect(boundary_pts[i][2] for i in eachindex(boundary_pts) )
 
-        focus_interval_coverage_domain, focus_interval_coverage_range = IntervalMonoFuncs.getintervalcoverages(start_pts, fin_pts, lb, ub)
-        @test isapprox(focus_interval_coverage_range, sum(intervals_y_fin-intervals_y_st))
-        @test isapprox(focus_interval_coverage_domain, domain_proportion*(ub-lb))
-
-    end
-
+@testset "createendopiewiselines1()" begin
+    
+    # test domain and range coverage of the created endomorphic piecewise-linear functions.
+    # max_N_itp_samples is the number of piecewise-linear functions to generate on the domain [0,1].
+    runcreateendopiewiselines1tests(;
+        val_type = Float64,
+        N_trials = 10000,
+        max_N_itp_samples = 100,
+        ZERO_TOL = 1e-10)
 
 end

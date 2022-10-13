@@ -40,7 +40,7 @@ p_ub = 1.0 # this must be 1.
 range_proportion = 0.1
 N_itp_samples = 10
 domain_proportion = 0.7
-infos, zs, p_range = IntervalMonoFuncs.getendomorphismpiecewiselinear(p_lb, p_ub, range_proportion; N_itp_samples = N_itp_samples, domain_proportion = domain_proportion)
+infos, zs, p_range = IntervalMonoFuncs.createendopiewiselines1(p_lb, p_ub, range_proportion; N_itp_samples = N_itp_samples, domain_proportion = domain_proportion)
 
 # construct the set of piece-wise functions.
 fs = collect( xx->IntervalMonoFuncs.evalpiecewise2Dlinearfunc(xx, infos[i]) for i in eachindex(infos) )
