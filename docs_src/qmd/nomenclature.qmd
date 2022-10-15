@@ -1,0 +1,81 @@
+
+# piecewise-linear function
+Our definition of the indicator function in this work is
+
+$$
+1_{a,b}\left(x\right):=\begin{cases}
+1 & \text{if }x\in\left[a,b\right]\subset\left[-1,1\right],\\
+0 & \text{otherwise.}
+\end{cases}
+$$
+
+
+Given a compression parameter $c\in\left(0,2\right)$, non-overlapping
+intervals in $\left(-1,1\right)\subset\mathbb{R}$ as parameterized
+by the set of endpoints $\left\{ c_{l},d_{l}\right\}$, our piece-wise
+linear map $\left[-1,1\right]\rightarrow\left[-1,1\right]$ is of
+the form
+
+$$
+f\left(x\right):=\begin{cases}
+\sum_{l}f_{l}\left(x\right) & \text{if }x\in\left[-1,1\right],\\
+1 & \text{if }x>s,\\
+-1 & \text{otherwise}.
+\end{cases}
+$$
+
+
+The linear function on interval $l$ is
+
+$f_{l}\left(x\right):=\left(m_{l}x+b_{l}\right)1_{a_{l},b_{l}}\left(x\right).$
+
+
+The choice of $\left\{ m_{l},b_{l}\right\}$ is such that:
+
+* $f$ is continuous.
+* $\sum_{l}\left(b_{l}-a_{l}\right)=c$.
+* $m_{l}=\frac{d_{l}-c_{l}}{b_{l}-a_{l}}$.
+
+The parameters $\left\{ c_{l},d_{l}\right\}$ define the $l$-th interval in the range of $f$, while $\left\{ a_{l},b_{l}\right\}$ define the domain. The compression $c$ characterizes the slope of the linears in the transform $f$.
+
+## Implementation
+The function definition of `getpiecewiselines()` is 
+```julia
+getpiecewiselines(intervals_y_st::Vector{T},
+    intervals_y_fin::Vector{T},
+    domain_proportion::T;
+    lb = -one(T),
+    ub = one(T))::Tuple{Piecewise2DLineType{T}, T} where T <: Real
+```
+
+The compression parameter $c$ is specified by the inputs `domain_proportion`, `ub`, and `lb`, via the following:
+```julia
+c = domain_proportion*(ub-lb)
+```
+The elements in `intervals_y_st` are the elements of $\left\{ c_{l}\right\}$, and the elements in `intervals_y_fin` are the elements of $\left\{ d_{l}\right\}$. We allow these endpoints to also include the boundaries -1 and 1, and readjust accordingly in our implementation.
+
+See the [piecewise-linear example](piecewise-linear.html) for a guide.
+
+## Generalize to other intervals
+To generalize the domain and range of this map from $\left[-1,1\right]$ to $\left[-s,s\right]$, we use $\frac{x}{s}$ as the input to the map $f$, and rescale the output by $s$, e.g. $sf\left(\frac{x}{s}\right)$ is the final output. The object `scale` throughout our documentation and eaxmple guide is $s$ for this purpose.
+
+## Two-segment case
+When we only consider two-segment piecewise-linear functions, we can consider one of the segments as the *focus interval*. We could fit a range of these functions where the focus interval gradually shifts and collectively covers the entire domain/range.
+
+This is useful in creating a family of parametric transport maps (each is a two-segment piecewise-linear function) that each transform a uniform distribution on an interval to a two-piece-uniform distribution on the same interval. The interpretation of the *focus interval* is that it focuses mass to that interval in the destination distribution (i.e. the two-piece-uniform distribution). In this package, the exported function `createendopiewiselines1()` creates such a family of two-segment piecewise-linear functions given some information about the focus interval and the domain/range interval.
+
+One can get a smooth approximate transport map to each two-segment piecewise-linear function by fitting the parameters of the smooth transport map to each member of the family of two-segment piecewise-linear functions. 
+
+# Logistic-logit function
+Given the real numbers $a$ and $b$, our definition of a *logistic-logit* function $f$ is a composition of the logistic and logit functions, given by the following:
+
+$$
+\begin{align*}
+f\left(x\right) & :\left(0,1\right)\rightarrow\left(0,1\right)\\
+x & \mapsto\frac{1}{1+\exp\left(-a\ln\left(\frac{x}{1-x}-b\right)\right)}.
+\end{align*}
+$$
+
+`f` is monotonically increasing if $a>0$, monotonically decreasing if $a<0$, and constant if $a=0$.
+
+The [logistic-logit fit example](logistic-logit_fit.html) goes through the process of creating a family of two-segment piecewise-linear functions, fit each to a logistic-logit function, and plot its action on samples drawn from the uniform distribution over the specified interval.

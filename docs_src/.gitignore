@@ -1,0 +1,4 @@
+build/
+site/
+
+qmd/.ipynb_checkpoints
