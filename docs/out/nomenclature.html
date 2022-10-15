@@ -164,11 +164,18 @@ f\left(x\right):=\begin{cases}
 <p>Given the real numbers <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>, our definition of a <em>logistic-logit</em> function <span class="math inline">\(f\)</span> is a composition of the logistic and logit functions, given by the following:</p>
 <p><span class="math display">\[
 \begin{align*}
-f\left(x\right) &amp; :\left(0,1\right)\rightarrow\left(0,1\right)\\
-x &amp; \mapsto\frac{1}{1+\exp\left(-a\ln\left(\frac{x}{1-x}-b\right)\right)}.
+f:\left(0,1\right) &amp; \rightarrow\left(0,1\right)\\
+x &amp; \mapsto\frac{1}{1+e^{\left(-a\ln\left(\frac{x}{1-x}-b\right)\right)}}
 \end{align*}
 \]</span></p>
 <p><code>f</code> is monotonically increasing if <span class="math inline">\(a&gt;0\)</span>, monotonically decreasing if <span class="math inline">\(a&lt;0\)</span>, and constant if <span class="math inline">\(a=0\)</span>.</p>
+<p>Its inverse is given by</p>
+<p><span class="math display">\[
+\begin{align*}
+f^{-1}:\left(0,1\right) &amp; \rightarrow\left(0,1\right)\\
+y &amp; \mapsto\frac{e^{b}}{e^{b}+\left(\frac{1}{y}-1\right)^{\frac{1}{a}}}
+\end{align*}
+\]</span></p>
 <p>The <a href="logistic-logit_fit.html">logistic-logit fit example</a> goes through the process of creating a family of two-segment piecewise-linear functions, fit each to a logistic-logit function, and plot its action on samples drawn from the uniform distribution over the specified interval.</p>
 </section>
 

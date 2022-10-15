@@ -15,17 +15,29 @@
 # You may add additional accurate notices of copyright ownership.
 
 """
-    evalcompositelogisticprobit(x::T, a, b)::T where T <: Real
+    evalcompositelogisticprobit(x::T, a::T, b::T)::T where T <: Real
 
 evaluates the map from `(0,1)` to `(0,1)`.
 returns `1/(1 + exp(-a*(log(x/(1-x))-b)))`
+
+Some numerical stability issues when the magnitudes of `a` or `b` is larger than 2 when `T = Float64`. See `/examples/logistic-probit.jl` for an example of stability test in the root package directory.
 """
-function evalcompositelogisticprobit(x::T, a, b)::T where T <: Real
+function evalcompositelogisticprobit(x::T, a::T, b::T)::T where T <: Real
 
     return 1/(1 + exp(-a*(log(x/(1-x))-b)))
 end
 
-function evalcompositelogisticprobit(x_inp::T, a, b, lb, ub)::T where T <: Real
+"""
+    evalcompositelogisticprobit(x_inp::T, a::T, b::T, lb::T, ub::T)::T where T <: Real
+
+Applies the following:
+- Transforms `y` from `[lb,ub]` to `(0,1)`.
+- evaluates the map, `1/(1 + exp(-a*(log(x/(1-x))-b)))`, which transforms a value from `(0,1)` to `(0,1)`.
+- transforms the evaluated map value from `(0,1)` to `[lb,ub]`, and returns the result.
+
+Some numerical stability issues when the magnitudes of `a` or `b` is larger than 2 when `T = Float64`. See `/examples/logistic-probit.jl` for an example of stability test in the root package directory.
+"""
+function evalcompositelogisticprobit(x_inp::T, a::T, b::T, lb::T, ub::T)::T where T <: Real
 
     x = convertcompactdomain(x_inp, lb, ub, zero(T), one(T))
     y = evalcompositelogisticprobit(x, a, b)
@@ -35,15 +47,27 @@ function evalcompositelogisticprobit(x_inp::T, a, b, lb, ub)::T where T <: Real
 end
 
 """
-    evalinversecompositelogisticprobit(y::T, a, b)::T where T <: Real
+    evalinversecompositelogisticprobit(y::T, a::T, b::T)::T where T <: Real
 
 evaluates the map from `(0,1)` to `(0,1)`.
 return `exp(b)/(exp(b) + (-1 + 1/y)^(1/a))`
+
+Some numerical stability issues when the magnitudes of `a` or `b` is larger than 2 when `T = Float64`. See `/examples/logistic-probit.jl` for an example of stability test in the root package directory.
 """
-function evalinversecompositelogisticprobit(y::T, a, b)::T where T <: Real
+function evalinversecompositelogisticprobit(y::T, a::T, b::T)::T where T <: Real
     return exp(b)/(exp(b) + (-1 + 1/y)^(1/a))
 end
 
+"""
+    evalinversecompositelogisticprobit(y::T, a::T, b::T)::T where T <: Real
+
+Applies the following:
+- Transforms `y` from `[lb,ub]` to `(0,1)`.
+- evaluates the map, `exp(b)/(exp(b) + (-1 + 1/y)^(1/a))`, which transforms a value from `(0,1)` to `(0,1)`.
+- transforms the evaluated map value from `(0,1)` to `[lb,ub]`, and returns the result.
+
+Some numerical stability issues when the magnitudes of `a` or `b` is larger than 2 when `T = Float64`. See `/examples/logistic-probit.jl` for an example of stability test in the root package directory.
+"""
 function evalinversecompositelogisticprobit(y_inp::T, a, b, lb, ub)::T where T <: Real
 
     y = convertcompactdomain(y_inp, lb, ub, zero(T), one(T))
@@ -52,29 +76,3 @@ function evalinversecompositelogisticprobit(y_inp::T, a, b, lb, ub)::T where T <
 
     return x_out
 end
-
-# function eval1Dnumericalinverse(f::Function,
-#     y::T,
-#     x0::T,
-#     a::T,
-#     b::T,
-#     max_iters::Int) where T <: Real
-
-#     @assert a < b
-
-#     obj_func = xx->((f(xx[1])-y)^2)::T
-
-#     op = Optim.Options( iterations = max_iters,
-#                          store_trace = false,
-#                          show_trace = false)
-
-#     results = Optim.optimize(   obj_func,
-#                                 [x0],
-#                                 Optim.NewtonTrustRegion(),
-#                                 op)
-
-#     x_star = results.minimizer
-#     x_out = clamp(x_star[1], a, b)
-
-#     return x_out, results
-# end

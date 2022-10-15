@@ -16,3 +16,8 @@ From the Julia REPL, type `]` then `add https://github.com/RoyCCWang/IntervalMon
 
 ## Examples
 All example Julia scripts are in the `/examples` folder. There are also full example guides based on the example Julia scripts on the documentation website.
+
+## Notes
+This package was tested against the `Float64` real number concrete Julia type. `BigFloat` was not tested in the current release.
+
+There are known numerical instabilities for certain parameter combinations with `evalcompositelogisticprobit()` and `evalinversecompositelogisticprobit()`. We advise the user to test for numerical stability when using a particular combination of parameters (`a` and `b`) for those functions in the application at hand. See `/examples/logistic-probit.jl` for an example of basic stability test.

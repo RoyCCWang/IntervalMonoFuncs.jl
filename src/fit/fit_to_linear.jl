@@ -90,13 +90,15 @@ Given a set of single-focus interval region piecewise-linear functions' paramete
 runoptimfunc = (pp0, ff, dff, pp_lb, pp_ub)->runoptimroutine(pp0, ff, dff, pp_lb, pp_ub, other_args...)
 ```
 where `runoptimroutine()` is the user-supplied routine for invoking their box-constrained numerical minimization code of choice. The other optimization package-specific tuning parameters can go where `other_args...` is.
-`runoptimfunc` should a `Vector{T}` that contains the solution to the numerical minimization of `ff`.
+`runoptimfunc()` should return a `Vector{T}` that contains the solution to the numerical minimization of `ff`.
 
-The `pp0` input slot is the optimization variable initial guess slot.
-the `ff` slot is for the costfunction,
-the `dff` slot is for the gradient of the costfunction,
-the `pp_lb` slot is for the lower bounds of the optimization variable,
-the `pp_ub` slot is for the upper bounds of the variable.
+The `pp0::Vector{T}` input slot is the optimization variable initial guess slot.
+the `ff::Function` slot is for the cost function, It should be such that `ff(pp0)` is the cost associated with the initial guess.
+the `dff::Function` slot is for the gradient of the cost function, It should be such that `dff(pp0` is the gradient of the cost function evaluated at the initial guess, but one can assign it any function (such as the identity `xx->xx`) if they are not using a gradient-based optimization algorithm in their `runoptimfunc()`.
+the `pp_lb::Vector{T}` slot is for the lower bounds of the optimization variable,
+the `pp_ub::Vector{T}` slot is for the upper bounds of the variable.
+
+`runoptimfunc()` must return a 1D array of type `Vector{T}`, where `T = eltype(pp0)`.
 
 There are examples on how to create a valid `runoptimfunc` on the repository documentation website and in `/examples/fit_logistic-logit.jl`.
 

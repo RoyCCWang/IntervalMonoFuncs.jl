@@ -24,3 +24,4 @@ deps/src/
 Manifest.toml
 
 .vscode
+docs_src/qmd/.ipynb_checkpoints

@@ -71,13 +71,15 @@ PyPlot.ylabel("y")
 PyPlot.title("piecewise-linear functions (f[.]), each with a single focus subinterval")
 
 ### create the run-optimization routine, `runoptimfunc`.
-function runoptimroutine(x_initial, obj_func::Function, grad_func::Function, x_lb, x_ub;
+function runoptimroutine(x_initial::Vector{T}, obj_func::Function, grad_func::Function, x_lb, x_ub;
     optim_algorithm = :LN_BOBYQA,
     max_iters = 10000,
     xtol_rel = 1e-12,
     ftol_rel = 1e-12,
-    maxtime = Inf)
+    maxtime = Inf)::Vector{T} where T <: Real
     
+    @assert length(x_initial) == length(x_lb) == length(x_ub)
+
     opt = NLopt.Opt(optim_algorithm, length(x_initial))
 
     opt.maxeval = max_iters
@@ -113,6 +115,7 @@ function genericNLoptcostfunc!(x::Vector{T}, df_x, f, df)::T where T <: Real
     return f(x)
 end
 
+# runoptimfunc() must return a 1D array of type Vector{T}, where T = eltype(pp0).
 runoptimfunc = (pp0, ff, dff, pp_lb, pp_ub)->runoptimroutine(pp0, ff, dff, pp_lb, pp_ub;
     optim_algorithm = :LN_BOBYQA, # a local derivative-free algorithm. For other algorithms in NLopt, see https://nlopt.readthedocs.io/en/latest/NLopt_Algorithms/
     max_iters = 5000,

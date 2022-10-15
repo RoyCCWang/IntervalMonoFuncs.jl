@@ -119,6 +119,7 @@ function genericNLoptcostfunc!(x::Vector{T}, df_x, f, df)::T where T <: Real
     return f(x)
 end
 
+# runoptimfunc() must return a 1D array of type Vector{T}, where T = eltype(pp0).
 runoptimfunc = (pp0, ff, dff, pp_lb, pp_ub)->runoptimroutine(pp0, ff, dff, pp_lb, pp_ub;
     optim_algorithm = :LN_BOBYQA, # a local derivative-free algorithm. For other algorithms in NLopt, see https://nlopt.readthedocs.io/en/latest/NLopt_Algorithms/
     max_iters = 5000,

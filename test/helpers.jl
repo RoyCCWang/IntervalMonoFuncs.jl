@@ -11,7 +11,7 @@ end
 
 function generatestartfinishpts(N_intervals::Int, lb::T, ub::T) where T <: Real
     N_pts = 2*N_intervals
-    X = sort(collect( convertcompactdomain(rand(), zero(T), one(T), lb, ub) for d = 1:N_pts ))
+    X = sort(collect( convertcompactdomain(rand(T), zero(T), one(T), lb, ub) for d = 1:N_pts ))
 
     start_pts = Vector{T}(undef, N_intervals)
     finish_pts = Vector{T}(undef, N_intervals)
@@ -30,28 +30,29 @@ end
 
 
 #### test bench for piecewise-linear functions. Based on /examples/piecewise-linear.jl.
-function runpiecewiselineartests(;
-    val_type = Float64,
+function runpiecewiselineartests(dummy_val::T;
     N_trials = 100,
     N_intervals = 4,
     N_eval_pts = 5000,
     use_lb_as_start = true, # special case involving boundary.
-    ZERO_TOL = 1e-10)
-
-    @assert val_type <: Real
-    T = val_type
-
-    #test_result = true
+    ZERO_TOL = 1e-10,
+    bound_min::T = -200.0, # must be efinite.
+    bound_max::T = 200.0) where T <: Real # must be finite.
 
     for n = 1:N_trials
 
         ## generate setup.
         
         # parameters.
-        tmp = randn(val_type, 2) .* 50
-        lb = minimum(tmp)
-        ub = maximum(tmp)
+        # tmp = randn(val_type, 2) .* 50 # randn() can't do BigFloat.
+        # lb = minimum(tmp)
+        # ub = maximum(tmp)
 
+        tmp1 = convertcompactdomain(rand(T), zero(T), one(T), convert(T, bound_min), convert(T, bound_max))
+        tmp2 = convertcompactdomain(rand(T), zero(T), one(T), convert(T, bound_min), convert(T, bound_max))
+        lb = min(tmp1,tmp2)
+        ub = max(tmp1,tmp2)
+        
         domain_proportion = rand(T)
 
         # points.
@@ -90,18 +91,18 @@ function runpiecewiselineartests(;
 end
 
 ##### tests for logisticprobit inverse. Based on /examples/logistic.jl
-function runlogistictests(;
-    val_type = Float64,
+function runlogistictests(dummy_val::T;
     N_trials = 100,
-    a_bounds = [0.5, 0.6],
-    b_bounds = [-5.0, 5.0],
+    a_bounds::Vector{T} = [0.5, 0.6],
+    b_bounds::Vector{T} = [-5.0, 5.0],
     N_eval_pts = 5000,
-    ZERO_TOL = 1e-10)
+    ZERO_TOL = 1e-10) where T <: Real
+
+    val_type = T
 
     @assert a_bounds[2] > a_bounds[1]
     @assert b_bounds[2] > b_bounds[1]
-    
-    T = val_type
+
     lb = -one(T)
     ub = one(T)
 
