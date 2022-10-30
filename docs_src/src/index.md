@@ -2,7 +2,7 @@
 This library provides methods to construct transport maps that transform the uniform distribution on an interval to some distribution on the same interval that has mass concentrated in user-specified regions.
 
 ## Install
-Add (currently) unregistered public Julia package for dependency before installing NMRSpectraSimulator.jl
+Add (currently) unregistered public Julia package for dependency before installing IntervalMonoFuncs.jl
 ``` julia
 import Pkg
 Pkg.add(path="https://github.com/RoyCCWang/IntervalMonoFuncs.jl")
@@ -34,10 +34,3 @@ See our [nomenclature](./out/nomenclature.html) page.
 * piecewise-linear construction guide: [HTML](./out/piecewise-linear.html), [Jupyter notebook](./out/piecewise-linear.ipynb)
 
 * logistic-probit fit and usage guide: [HTML](./out/logistic-logit_fit.html), [Jupyter notebook](./out/logistic-logit_fit.ipynb)
-
-
-
-
-
-
-
